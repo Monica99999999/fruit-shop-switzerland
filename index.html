@@ -422,6 +422,7 @@ const t = {
     invoice_success_desc: "We'll send you an invoice by email.\nPay after delivery — bank transfer or TWINT.",
     wa_message: "Hello FreshFruit! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
     products: [
+      { name:"Swiss Apricots (Valais)",      desc:"Sweet, juicy, sun-ripened in Valais",      tag:"🇨🇭 Swiss Local",   cat:"local"   },
       { name:"Swiss Apple (Waadtländer)",     desc:"Crispy, sweet, locally grown in Vaud",          tag:"🇨🇭 Swiss Local",   cat:"local"   },
       { name:"Swiss Strawberries",              desc:"Fresh picked, super sweet",                     tag:"🇨🇭 Seasonal",       cat:"local"   },
       { name:"Mango (Kent)",                   desc:"Juicy and fiber-free",                          tag:"🏝️ Tropical",       cat:"tropical" },
@@ -471,6 +472,7 @@ const t = {
     invoice_success_desc: "Wir senden Ihnen eine Rechnung per E-Mail.\nBezahlen Sie nach Lieferung – Banküberweisung oder TWINT.",
     wa_message: "Hallo FreshFruit! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
     products: [
+      { name:"Schweizer Aprikosen (Wallis)", desc:"Süss, saftig, sonnenreif aus dem Wallis", tag:"🇨🇭 Schweizer Obst", cat:"local"   },
       { name:"Schweizer Apfel (Waadtländer)",  desc:"Knackig, süss, aus dem Kanton Waadt",            tag:"🇨🇭 Schweizer Obst",  cat:"local"   },
       { name:"Schweizer Erdbeeren",             desc:"Frisch gepflückt, super süss",                  tag:"🇨🇭 Saisonal",       cat:"local"   },
       { name:"Mango (Kent)",                   desc:"Saftig und faserfrei",                           tag:"🏝️ Tropisch",       cat:"tropical" },
@@ -520,6 +522,7 @@ const t = {
     invoice_success_desc: "Nous vous enverrons une facture par e-mail.\nPayez après livraison – virement ou TWINT.",
     wa_message: "Bonjour FreshFruit ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
     products: [
+      { name:"Abricots Suisses (Valais)",    desc:"Sucrés, juteux, mûris au soleil à Valais", tag:"🇨🇭 Suisse",        cat:"local"   },
       { name:"Pomme Suisse (Waadtländer)",      desc:"Croquante, sucrée, cultivée dans le canton de Vaud", tag:"🇨🇭 Suisse",        cat:"local"   },
       { name:"Fraises Suisses",                  desc:"Fraîchement cueillies, super sucrées",                tag:"🇨🇭 De Saison",     cat:"local"   },
       { name:"Mangue (Kent)",                    desc:"Juteuse et sans fibres",                              tag:"🏝️ Tropical",       cat:"tropical" },
@@ -538,6 +541,7 @@ const t = {
 
 // Chinese product list (read from data-zh attributes)
 const zhProducts = [
+  { name:"瑞士杏子（瓦莱产）",       desc:"甜美多汁，瓦莱州阳光熟成",               tag:"🇨🇭 瑞士本地",   cat:"local"   },
   { name:"瑞士苹果（沃州产）",       desc:"脆甜多汁，皮薄肉厚，沃德州本地种植",       tag:"🇨🇭 瑞士本地",   cat:"local"   },
   { name:"瑞士草莓",                 desc:"现摘现发，超级甜",                       tag:"🇨🇭 当季水果",   cat:"local"   },
   { name:"芒果（Kent）",              desc:"多汁无纤维",                              tag:"🏝️ 热带水果",   cat:"tropical" },
@@ -602,18 +606,19 @@ document.addEventListener('click', e => {
 //   '1份' = 1份        '1 bag' = 1袋       '250g×2' = 250克×2包
 //   '1kg bag' = 1公斤袋装             'small basket' = 小篮
 const productPrices = [
-  { id:1,  price:12.90, unit:'1kg'       },
-  { id:2,  price:8.90,  unit:'500g'      },
-  { id:3,  price:6.50,  unit:'1pc'       },
-  { id:4,  price:9.90,  unit:'250g×2'    },
-  { id:5,  price:29.90, unit:'1kg'       },
-  { id:6,  price:7.90,  unit:'1kg'       },
-  { id:7,  price:14.90, unit:'500g'      },
-  { id:8,  price:8.90,  unit:'1pc'       },
-  { id:9,  price:7.90,  unit:'250g'      },
-  { id:10, price:49.90, unit:'1盒'       },
-  { id:11, price:39.90, unit:'1篮'       },
-  { id:12, price:9.90,  unit:'3pcs'      },
+  { id:1,  price:14.90, unit:'500g'      },
+  { id:2,  price:12.90, unit:'1kg'       },
+  { id:3,  price:8.90,  unit:'500g'      },
+  { id:4,  price:6.50,  unit:'1pc'       },
+  { id:5,  price:9.90,  unit:'250g×2'    },
+  { id:6,  price:29.90, unit:'1kg'       },
+  { id:7,  price:7.90,  unit:'1kg'       },
+  { id:8,  price:14.90, unit:'500g'      },
+  { id:9,  price:8.90,  unit:'1pc'       },
+  { id:10, price:7.90,  unit:'250g'      },
+  { id:11, price:49.90, unit:'1盒'       },
+  { id:12, price:39.90, unit:'1篮'       },
+  { id:13, price:9.90,  unit:'3pcs'      },
 ];
 
 let cart = {};
