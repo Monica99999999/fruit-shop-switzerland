@@ -40,7 +40,8 @@
     .products { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 12px 20px; }
     .card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); transition: transform .2s; }
     .card:active { transform: scale(0.97); }
-    .card-img { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 56px; background: #e3f2fd; }
+    .card-img { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 56px; background: #e3f2fd; overflow: hidden; }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .card-body { padding: 9px 10px 10px; }
     .card-name { font-size: 13px; font-weight: 600; color: #222; line-height: 1.3; }
     .card-desc { font-size: 10px; color: #999; margin-top: 3px; line-height: 1.4; }
@@ -507,12 +508,18 @@ function getProductInfo(id) {
 
 function renderProducts(cat) {
   const grid = document.getElementById('productGrid');
+  // Helper: get card-img HTML (real photo for ID 1&2, emoji otherwise)
+  function getCardImg(id) {
+    if (id === 1) return `<img src="apricot.png" alt="Apricots" style="width:100%;height:100%;object-fit:cover;">`;
+    if (id === 2) return `<img src="apple.png" alt="Apple" style="width:100%;height:100%;object-fit:cover;">`;
+    return emojis[id-1];
+  }
   if (currentLang === 'zh') {
     const list = cat === 'all' ? zhProducts : zhProducts.filter(p => p.cat === cat);
     grid.innerHTML = list.map(p => {
       const price = productPrices.find(x => x.id === p.id);
       return `<div class="card">
-        <div class="card-img">${emojis[p.id-1]}</div>
+        <div class="card-img">${getCardImg(p.id)}</div>
         <div class="card-body">
           <div class="card-name">${p.name}</div>
           <div class="card-desc">${p.desc}</div>
@@ -531,7 +538,7 @@ function renderProducts(cat) {
   grid.innerHTML = list.map(p => {
     const price = productPrices.find(x => x.id === p.id);
     return `<div class="card">
-        <div class="card-img">${emojis[p.id-1]}</div>
+        <div class="card-img">${getCardImg(p.id)}</div>
         <div class="card-body">
           <div class="card-name">${p.name}</div>
           <div class="card-desc">${p.desc}</div>
@@ -594,8 +601,13 @@ function renderCart() {
     const p = getProductInfo(Number(id));
     const subtotal = p.price * cart[id];
     total += subtotal;
+    // Show real photo for ID 1&2, emoji otherwise
+    let imgHtml;
+    if (p.id === 1) imgHtml = `<img src="apricot.png" alt="Apricots" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">`;
+    else if (p.id === 2) imgHtml = `<img src="apple.png" alt="Apple" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">`;
+    else imgHtml = emojis[p.id-1];
     return `<div class="cart-item">
-        <div class="ci-emoji">${emojis[p.id-1]}</div>
+        <div class="ci-emoji">${imgHtml}</div>
         <div class="ci-info">
           <div class="ci-name">${p.name}</div>
           <div class="ci-price">CHF ${p.price.toFixed(2)}/${p.unit} × ${cart[id]} = CHF ${subtotal.toFixed(2)}</div>
