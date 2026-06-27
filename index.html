@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html id="htmlRoot" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>FreshFruit · Premium Fruits Switzerland</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #fef9f3; color: #333; min-height: 100vh;
+    }
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: linear-gradient(135deg, #1565c0, #1e88e5);
+      padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(21,101,192,0.35);
+    }
+    .logo { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+    .logo span { font-size: 11px; font-weight: 400; opacity: .85; display: block; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .lang-btn {
+      background: rgba(255,255,255,0.22); border: 1.5px solid rgba(255,255,255,0.5);
+      color: #fff; border-radius: 16px; padding: 4px 10px;
+      font-size: 12px; cursor: pointer; font-weight: 600;
+    }
+    .cart-btn {
+      background: rgba(255,255,255,0.22); border: 1.5px solid rgba(255,255,255,0.5);
+      color: #fff; border-radius: 20px; padding: 6px 12px;
+      font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px;
+    }
+    .cart-count {
+      background: #fff; color: #1565c0; border-radius: 50%; width: 19px; height: 19px;
+      font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .hero {
+      background: linear-gradient(145deg, #e3f2fd, #bbdefb); margin: 12px 12px 0;
+      border-radius: 16px; padding: 24px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .hero-text h2 { font-size: 22px; color: #0d47a1; font-weight: 800; line-height: 1.3; }
+    .hero-text p { font-size: 12px; color: #1565c0; margin-top: 6px; line-height: 1.5; }
+    .hero-btn {
+      margin-top: 12px; display: inline-block; background: #1565c0; color: #fff;
+      border-radius: 20px; padding: 9px 18px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none;
+    }
+    .hero-emoji { font-size: 60px; line-height: 1; }
+    .features { display: flex; gap: 0; background: #fff; margin: 12px 12px 0;
+      border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .feat-item { flex: 1; padding: 12px 4px; text-align: center; font-size: 10px; color: #666; }
+    .feat-item + .feat-item { border-left: 1px solid #f5f5f5; }
+    .feat-icon { font-size: 22px; display: block; margin-bottom: 3px; }
+    .feat-item strong { display: block; font-size: 11px; color: #1565c0; margin-bottom: 2px; }
+    .section-title { font-size: 15px; font-weight: 700; color: #333; padding: 16px 12px 8px; }
+    .categories { display: flex; gap: 8px; padding: 0 12px 6px; overflow-x: auto; scrollbar-width: none; }
+    .categories::-webkit-scrollbar { display: none; }
+    .cat-tag {
+      flex-shrink: 0; background: #fff; border: 1.5px solid #bbdefb;
+      border-radius: 18px; padding: 6px 14px; font-size: 12px; color: #555; cursor: pointer; transition: all .2s;
+    }
+    .cat-tag.active, .cat-tag:hover { background: #1565c0; border-color: #1565c0; color: #fff; }
+    .products { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 12px 20px; }
+    .card { background: #fff; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07); transition: transform .2s; }
+    .card:active { transform: scale(0.97); }
+    .card-img { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+      font-size: 56px; background: #e3f2fd; }
+    .card-body { padding: 9px 10px 10px; }
+    .card-name { font-size: 13px; font-weight: 600; color: #222; line-height: 1.3; }
+    .card-desc { font-size: 10px; color: #999; margin-top: 3px; line-height: 1.4; }
+    .card-tag { display: inline-block; background: #e3f2fd; color: #1565c0; border-radius: 8px;
+      padding: 2px 7px; font-size: 9px; font-weight: 600; margin-top: 4px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 7px; }
+    .card-price { font-size: 15px; font-weight: 800; color: #e65100; }
+    .card-unit { font-size: 11px; font-weight: 500; color: #666; margin-left: 2px; }
+    .add-btn {
+      background: #1565c0; color: #fff; border: none; border-radius: 50%;
+      width: 28px; height: 28px; font-size: 18px; cursor: pointer; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(21,101,192,0.4);
+    }
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; }
+    .cart-overlay.open { display: block; }
+    .cart-panel {
+      position: fixed; right: 0; top: 0; bottom: 0; width: min(92vw, 400px);
+      background: #fff; z-index: 201; transform: translateX(100%); transition: transform .3s ease;
+      display: flex; flex-direction: column;
+    }
+    .cart-panel.open { transform: translateX(0); }
+    .cart-header { background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff;
+      padding: 16px 16px 12px; display: flex; align-items: center; justify-content: space-between; }
+    .cart-header h3 { font-size: 17px; font-weight: 700; }
+    .close-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 12px; }
+    .empty-cart { text-align: center; padding: 50px 0; color: #bbb; font-size: 14px; }
+    .empty-cart span { font-size: 44px; display: block; margin-bottom: 10px; }
+    .cart-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+    .ci-emoji { font-size: 32px; }
+    .ci-info { flex: 1; }
+    .ci-name { font-size: 13px; font-weight: 600; }
+    .ci-price { font-size: 12px; color: #e65100; margin-top: 2px; }
+    .ci-ctrl { display: flex; align-items: center; gap: 6px; }
+    .ci-btn { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #ddd; background: #fff;
+      font-size: 15px; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
+    .ci-qty { font-size: 14px; font-weight: 600; min-width: 18px; text-align: center; }
+    .cart-footer { padding: 12px; border-top: 1px solid #f0f0f0; }
+    .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .cart-total span { font-size: 14px; color: #666; }
+    .cart-total strong { font-size: 20px; color: #e65100; font-weight: 800; }
+    .checkout-btn {
+      width: 100%; background: linear-gradient(135deg, #1565c0, #1e88e5);
+      color: #fff; border: none; border-radius: 24px; padding: 14px;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(21,101,192,0.4);
+    }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .checkout-modal { background: #fff; border-radius: 20px; padding: 24px 18px; width: min(92vw, 380px); animation: popIn .3s ease; }
+    @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .cm-header { text-align: center; margin-bottom: 18px; }
+    .cm-header .icon { font-size: 48px; }
+    .cm-header h3 { font-size: 18px; font-weight: 700; color: #333; margin-top: 6px; }
+    .cm-header p { font-size: 12px; color: #888; margin-top: 4px; }
+    .pay-options { display: flex; flex-direction: column; gap: 10px; }
+    .pay-card {
+      display: flex; align-items: center; gap: 12px; border: 2px solid #e0e0e0;
+      border-radius: 14px; padding: 14px 14px; cursor: pointer; transition: all .2s;
+    }
+    .pay-card:active { transform: scale(0.98); }
+    .pay-card.paypal { border-color: #003087; background: #f5f8ff; }
+    .pay-card.paypal:hover { box-shadow: 0 2px 12px rgba(0,48,135,0.2); }
+    .pay-card.whatsapp { border-color: #25d366; background: #f0fdf4; }
+    .pay-card.whatsapp:hover { box-shadow: 0 2px 12px rgba(37,211,102,0.25); }
+    .pay-card.invoice { border-color: #ff9800; background: #fff8f0; }
+    .pay-card.invoice:hover { box-shadow: 0 2px 12px rgba(255,152,0,0.2); }
+    .pay-icon { font-size: 32px; flex-shrink: 0; }
+    .pay-info { flex: 1; }
+    .pay-info strong { display: block; font-size: 14px; color: #333; }
+    .pay-info span { font-size: 11px; color: #888; display: block; margin-top: 2px; }
+    .pay-arrow { font-size: 18px; color: #bbb; }
+    .cm-close { display: block; margin: 16px auto 0; background: none; border: none; color: #999; font-size: 13px; cursor: pointer; }
+    .success-modal { background: #fff; border-radius: 20px; padding: 28px 22px; width: min(88vw, 320px); text-align: center; animation: popIn .3s ease; }
+    .success-modal .icon { font-size: 56px; margin-bottom: 10px; }
+    .success-modal h3 { font-size: 18px; font-weight: 700; color: #333; }
+    .success-modal p { font-size: 13px; color: #888; margin-top: 7px; line-height: 1.6; }
+    .success-btn { margin-top: 18px; background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff; border: none; border-radius: 20px; padding: 11px 32px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .wa-float {
+      position: fixed; bottom: 20px; right: 16px; z-index: 150;
+      width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: #fff; border: none;
+      font-size: 30px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+      display: flex; align-items: center; justify-content: center; transition: transform .2s;
+    }
+    .wa-float:active { transform: scale(0.9); }
+    .wa-float::after {
+      content: ''; position: absolute; inset: -4px; border-radius: 50%;
+      border: 2px solid #25d366; animation: waPulse 2s infinite;
+    }
+    @keyframes waPulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.3); opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
+    .wa-tooltip {
+      position: absolute; right: 64px; top: 50%; transform: translateY(-50%);
+      background: #333; color: #fff; font-size: 11px; white-space: nowrap;
+      padding: 6px 12px; border-radius: 14px; pointer-events: none; opacity: 0; transition: opacity .3s;
+    }
+    .wa-float:hover .wa-tooltip { opacity: 1; }
+    .social-section { margin: 0 12px 16px; background: #fff; border-radius: 14px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .social-title { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 10px; }
+    .social-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+    .fb-btn {
+      display: inline-flex; align-items: center; gap: 6px; background: #1877f2; color: #fff;
+      border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .ig-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); color: #fff;
+      border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .wa-btn-social {
+      display: inline-flex; align-items: center; gap: 6px; background: #25d366; color: #fff;
+      border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    footer { text-align: center; padding: 20px 12px; font-size: 11px; color: #ccc; border-top: 1px solid #f0f0f0; background: #fafafa; }
+    .footer-links { margin-top: 8px; }
+    .footer-links a { color: #1565c0; text-decoration: none; margin: 0 6px; font-size: 12px; }
+    .lang-dropdown {
+      position: absolute; top: 44px; right: 60px; background: #fff; border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15); overflow: hidden; z-index: 150; display: none;
+    }
+    .lang-dropdown.open { display: block; }
+    .lang-opt { padding: 10px 22px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .lang-opt:hover { background: #e3f2fd; }
+    .lang-opt.active { background: #bbdefb; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header style="position:relative;">
+  <div class="logo">
+    🍎 FreshFruit
+    <span data-i18n="tagline" data-zh="精选水果 · 瑞士直送"></span>
+  </div>
+  <div class="header-right">
+    <button class="lang-btn" id="langToggle" onclick="toggleLangMenu()">🌐 <span id="currentLangLabel">EN</span></button>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 <span data-i18n="cart" data-zh="购物车"></span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+  <div class="lang-dropdown" id="langDropdown">
+    <div class="lang-opt" onclick="setLang('en')">🇬🇺 English</div>
+    <div class="lang-opt" onclick="setLang('de')">🇩🇪 Deutsch</div>
+    <div class="lang-opt" onclick="setLang('fr')">🇫🇷 Français</div>
+    <div class="lang-opt" onclick="setLang('zh')">🇨🇳 中文</div>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-text">
+    <h2 data-i18n="hero_title" data-zh="新鲜水果，24小时内送达"></h2>
+    <p data-i18n="hero_sub" data-zh="优质品质 · 农场直达餐桌 · 100% 保证
+全瑞士配送 🇨🇭"></p>
+    <button class="hero-btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})" data-i18n="shop_now" data-zh="🛍️ 立即选购"></button>
+  </div>
+  <div class="hero-emoji">🍊🍇🍓</div>
+</div>
+
+<!-- Features -->
+<div class="features">
+  <div class="feat-item">
+    <span class="feat-icon">🚚</span>
+    <strong data-i18n="feat1_title" data-zh="极速配送"></strong>
+    <span data-i18n="feat1_desc" data-zh="24小时"></span>
+  </div>
+  <div class="feat-item">
+    <span class="feat-icon">✅</span>
+    <strong data-i18n="feat2_title" data-zh="品质保证"></strong>
+    <span data-i18n="feat2_desc" data-zh="100% 保证"></span>
+  </div>
+  <div class="feat-item">
+    <span class="feat-icon">🌱</span>
+    <strong data-i18n="feat3_title" data-zh="农场直供"></strong>
+    <span data-i18n="feat3_desc" data-zh="无中间商"></span>
+  </div>
+  <div class="feat-item">
+    <span class="feat-icon">💳</span>
+    <strong data-i18n="feat4_title" data-zh="安全支付"></strong>
+    <span data-i18n="feat4_desc" data-zh="PayPal & 信用卡"></span>
+  </div>
+</div>
+
+<!-- Categories -->
+<div class="section-title" id="shop"><span data-i18n="shop_title" data-zh="🛍️ 选购新鲜水果"></span></div>
+<div class="categories">
+  <span class="cat-tag active" onclick="filterCat(this,'all')" data-i18n="cat_all" data-zh="全部"></span>
+  <span class="cat-tag" onclick="filterCat(this,'local')" data-i18n="cat_local" data-zh="🇨🇭 瑞士本地"></span>
+  <span class="cat-tag" onclick="filterCat(this,'tropical')" data-i18n="cat_tropical" data-zh="🏝️ 热带水果"></span>
+  <span class="cat-tag" onclick="filterCat(this,'berry')" data-i18n="cat_berry" data-zh="🫐 浆果类"></span>
+  <span class="cat-tag" onclick="filterCat(this,'gift')" data-i18n="cat_gift" data-zh="🎁 礼盒装"></span>
+</div>
+
+<!-- Products -->
+<div class="products" id="productGrid"></div>
+
+<!-- Social -->
+<div class="section-title" data-i18n="social_title" data-zh="📱 关注我们 & 社交媒体下单"></div>
+<div class="social-section">
+  <div class="social-title" data-i18n="social_desc" data-zh="Facebook、Instagram 和 WhatsApp 均可下单！"></div>
+  <div class="social-btns">
+    <button class="fb-btn" onclick="openFacebookMessenger()">
+      <span data-i18n="fb_btn" data-zh="Facebook"></span>
+    </button>
+    <button class="ig-btn" onclick="openInstagramDM()">
+      <span data-i18n="ig_btn" data-zh="Instagram"></span>
+    </button>
+    <button class="wa-btn-social" onclick="openWhatsApp()">
+      <span data-i18n="wa_btn" data-zh="WhatsApp"></span>
+    </button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  © 2026 FreshFruit · <span data-i18n="footer_text" data-zh="新鲜送达全瑞士 🇨🇭"></span><br>
+  <div class="footer-links">
+    <a href="#" data-i18n="f_about" data-zh="关于我们"></a>
+    <a href="#" data-i18n="f_delivery" data-zh="配送说明"></a>
+    <a href="#" data-i18n="f_contact" data-zh="联系我们"></a>
+    <a href="#" data-i18n="f_refund" data-zh="退款政策"></a>
+  </div>
+</footer>
+
+<!-- Cart Panel -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h3>🛒 <span data-i18n="cart_title" data-zh="我的购物车"></span></h3>
+    <button class="close-btn" onclick="closeCart()">×</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span data-i18n="total" data-zh="合计 (CHF)"></span>
+      <strong id="cartTotal">CHF 0.00</strong>
+    </div>
+    <button class="checkout-btn" onclick="checkout()" data-i18n="checkout" data-zh="前往结算 →"></button>
+  </div>
+</div>
+
+<!-- Payment Modal -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="checkout-modal">
+    <div class="cm-header">
+      <div class="icon">💳</div>
+      <h3 data-i18n="pay_title" data-zh="选择付款方式"></h3>
+      <p data-i18n="pay_sub" data-zh="请选择您喜欢的付款方式"></p>
+    </div>
+    <div class="pay-options">
+      <div class="pay-card paypal" onclick="payWithPayPal()">
+        <div class="pay-icon">🅿️</div>
+        <div class="pay-info">
+          <strong>PayPal</strong>
+          <span data-i18n="pay_paypal_desc" data-zh="安全在线支付 · 信用卡或 PayPal 余额"></span>
+        </div>
+        <div class="pay-arrow">→</div>
+      </div>
+      <div class="pay-card whatsapp" onclick="payWithWhatsApp()">
+        <div class="pay-icon">💬</div>
+        <div class="pay-info">
+          <strong>WhatsApp</strong>
+          <span data-i18n="pay_wa_desc" data-zh="通过 WhatsApp 发送订单 · 快捷方便"></span>
+        </div>
+        <div class="pay-arrow">→</div>
+      </div>
+      <div class="pay-card invoice" onclick="payWithInvoice()">
+        <div class="pay-icon">📄</div>
+        <div class="pay-info">
+          <strong data-i18n="pay_invoice" data-zh="账单（瑞士）"></strong>
+          <span data-i18n="pay_invoice_desc" data-zh="收货后付款 · 银行转账或 TWINT"></span>
+        </div>
+        <div class="pay-arrow">→</div>
+      </div>
+    </div>
+    <button class="cm-close" onclick="closePaymentModal()" data-i18n="cancel" data-zh="← 返回购物车"></button>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="success-modal">
+    <div class="icon" id="successIcon"></div>
+    <h3 id="successTitle"></h3>
+    <p id="successDesc"></p>
+    <button class="success-btn" onclick="closeModal()" data-i18n="modal_btn" data-zh="好的，谢谢！"></button>
+  </div>
+</div>
+
+<!-- WhatsApp Float Button -->
+<button class="wa-float" onclick="openWhatsApp()" title="WhatsApp">
+  💬
+  <span class="wa-tooltip" data-i18n="wa_float" data-zh="通过 WhatsApp 下单"></span>
+</button>
+
+<script>
+// ===== CONFIGURATION =====
+const SHOP_CONFIG = {
+  paypalEmail: 'superfruitsvalais@outlook.com',
+  whatsappNumber: '41796495089',
+  currency: 'CHF',
+  shopName: 'FreshFruit',
+};
+
+// ===== i18n Translations (EN/DE/FR in JS, ZH read from data-zh attribute) =====
+const t = {
+  en: {
+    tagline: "Premium Fruits · Delivered in Switzerland",
+    cart: "Cart",
+    hero_title: "Fresh Fruits,\nDelivered in 24h",
+    hero_sub: "Premium quality · Farm to table · 100% guarantee\nShipping across Switzerland 🇨🇭",
+    shop_now: "🛍️ Shop Now",
+    feat1_title: "Fast Delivery", feat1_desc: "24h CH",
+    feat2_title: "Quality", feat2_desc: "100% Guarantee",
+    feat3_title: "Farm Direct", feat3_desc: "No Middleman",
+    feat4_title: "Secure Pay", feat4_desc: "PayPal & Card",
+    shop_title: "Shop Fresh Fruits",
+    cat_all: "All", cat_local: "🇨🇭 Swiss Local", cat_tropical: "🏝️ Tropical",
+    cat_berry: "🫐 Berries", cat_gift: "🎁 Gift Box",
+    social_title: "📱 Follow & Order on Social Media",
+    social_desc: "Also on Facebook, Instagram & WhatsApp — DM us to order!",
+    fb_btn: "Facebook", ig_btn: "Instagram", wa_btn: "WhatsApp",
+    f_about: "About Us", f_delivery: "Delivery", f_contact: "Contact", f_refund: "Refund Policy",
+    footer_text: "Delivering freshness across Switzerland 🇨🇭",
+    cart_title: "Your Cart", total: "Total (CHF)", checkout: "Proceed to Checkout →",
+    pay_title: "Choose Payment Method", pay_sub: "Select how you'd like to pay",
+    pay_paypal_desc: "Secure online payment · Credit card or PayPal balance",
+    pay_wa_desc: "Send your order via WhatsApp · Quick & easy",
+    pay_invoice: "Invoice (Switzerland)", pay_invoice_desc: "Pay after delivery · Bank transfer or TWINT",
+    cancel: "← Back to cart",
+    modal_btn: "Great, thanks!",
+    empty_cart: "Your cart is empty\nBrowse our fresh fruits!",
+    wa_float: "Order via WhatsApp",
+    paypal_success_title: "Redirecting to PayPal...",
+    paypal_success_desc: "You'll be redirected to PayPal to complete payment.\nYour order summary has been sent.",
+    wa_success_title: "Opening WhatsApp...",
+    wa_success_desc: "Your order details will be sent as a WhatsApp message.\nJust tap send to confirm!",
+    invoice_success_title: "Invoice Requested!",
+    invoice_success_desc: "We'll send you an invoice by email.\nPay after delivery — bank transfer or TWINT.",
+    wa_message: "Hello FreshFruit! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
+    products: [
+      { name:"Swiss Apple (Waadtländer)",     desc:"Crispy, sweet, locally grown in Vaud",          tag:"🇨🇭 Swiss Local",   cat:"local"   },
+      { name:"Swiss Strawberries",              desc:"Fresh picked, super sweet",                     tag:"🇨🇭 Seasonal",       cat:"local"   },
+      { name:"Mango (Kent)",                   desc:"Juicy and fiber-free",                          tag:"🏝️ Tropical",       cat:"tropical" },
+      { name:"Blueberries (Premium)",           desc:"Large, sweet, antioxidant-rich",               tag:"🫐 Premium",         cat:"berry"   },
+      { name:"Thai Durian (Frozen)",            desc:"Premium Monthong, creamy texture",              tag:"🌟 Asian Import",     cat:"tropical" },
+      { name:"Navel Orange",                    desc:"Juicy, seedless, rich in vitamin C",           tag:"🍊 Fresh",           cat:"local"   },
+      { name:"Swiss Cherry",                    desc:"Seasonal specialty from Switzerland",            tag:"🇨🇭 Limited",        cat:"local"   },
+      { name:"Dragon Fruit (Pitaya)",            desc:"Mildly sweet, vibrant pink skin",             tag:"🏝️ Exotic",         cat:"tropical" },
+      { name:"Raspberries",                     desc:"Tart and sweet, perfect for desserts",         tag:"🫐 Fresh",           cat:"berry"   },
+      { name:"Fruit Gift Box (Premium)",         desc:"Mix of 6 premium fruits, gift wrapped",        tag:"🎁 Gift",            cat:"gift"    },
+      { name:"Swiss Fruit Basket (Family Pack)", desc:"Seasonal Swiss fruits, 3kg family pack",       tag:"🇨🇭 Best Seller",    cat:"local"   },
+      { name:"Passion Fruit (Fresh)",            desc:"Aromatic, perfect for desserts and drinks",     tag:"🏝️ Tropical",       cat:"tropical" },
+    ]
+  },
+  de: {
+    tagline: "Premium Obst · Geliefert in der Schweiz",
+    cart: "Warenkorb",
+    hero_title: "Frisches Obst,\ninnert 24h geliefert",
+    hero_sub: "Premium Qualität · Vom Feld auf den Tisch · 100% Garantie\nVersand in ganz Schweiz 🇨🇭",
+    shop_now: "🛍️ Jetzt einkaufen",
+    feat1_title: "Schnelle Lieferung", feat1_desc: "24h CH",
+    feat2_title: "Qualität", feat2_desc: "100% Garantie",
+    feat3_title: "Direkt vom Bauern", feat3_desc: "Kein Zwischenhändler",
+    feat4_title: "Sicher Bezahlen", feat4_desc: "PayPal & Karte",
+    shop_title: "🛍️ Frisches Obst kaufen",
+    cat_all: "Alle", cat_local: "🇨🇭 Schweizer Obst", cat_tropical: "🏝️ Tropisch",
+    cat_berry: "🫐 Beeren", cat_gift: "🎁 Geschenkbox",
+    social_title: "📱 Folge uns & bestelle via Social Media",
+    social_desc: "Auch auf Facebook, Instagram & WhatsApp — schreib uns eine DM!",
+    fb_btn: "Facebook", ig_btn: "Instagram", wa_btn: "WhatsApp",
+    f_about: "Über uns", f_delivery: "Lieferung", f_contact: "Kontakt", f_refund: "Rückerstattung",
+    footer_text: "Frische in die ganze Schweiz geliefert 🇨🇭",
+    cart_title: "Dein Warenkorb", total: "Total (CHF)", checkout: "Zur Kasse →",
+    pay_title: "Zahlungsmethode wählen", pay_sub: "Wählen Sie Ihre Zahlungsart",
+    pay_paypal_desc: "Sichere Online-Zahlung · Kreditkarte oder PayPal-Guthaben",
+    pay_wa_desc: "Senden Sie Ihre Bestellung per WhatsApp · Schnell & einfach",
+    pay_invoice: "Rechnung (Schweiz)", pay_invoice_desc: "Nach Lieferung bezahlen · Banküberweisung oder TWINT",
+    cancel: "← Zurück zum Warenkorb",
+    modal_btn: "Super, danke!",
+    empty_cart: "Dein Warenkorb ist leer\nStöbere in unserem frischen Obst!",
+    wa_float: "Chat auf WhatsApp",
+    paypal_success_title: "Weiterleitung zu PayPal...",
+    paypal_success_desc: "Sie werden zu PayPal weitergeleitet.\nIhre Bestellübersicht wurde gesendet.",
+    wa_success_title: "WhatsApp wird geöffnet...",
+    wa_success_desc: "Ihre Bestelldaten werden als WhatsApp-Nachricht gesendet.\nTippen Sie auf Senden zum Bestätigen!",
+    invoice_success_title: "Rechnung angefordert!",
+    invoice_success_desc: "Wir senden Ihnen eine Rechnung per E-Mail.\nBezahlen Sie nach Lieferung – Banküberweisung oder TWINT.",
+    wa_message: "Hallo FreshFruit! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
+    products: [
+      { name:"Schweizer Apfel (Waadtländer)",  desc:"Knackig, süss, aus dem Kanton Waadt",            tag:"🇨🇭 Schweizer Obst",  cat:"local"   },
+      { name:"Schweizer Erdbeeren",             desc:"Frisch gepflückt, super süss",                  tag:"🇨🇭 Saisonal",       cat:"local"   },
+      { name:"Mango (Kent)",                   desc:"Saftig und faserfrei",                           tag:"🏝️ Tropisch",       cat:"tropical" },
+      { name:"Blaubeeren (Premium)",            desc:"Gross, süss, reich an Antioxidantien",           tag:"🫐 Premium",         cat:"berry"   },
+      { name:"Thai-Durian (Gefroren)",          desc:"Premium Monthong, cremige Textur",               tag:"🌟 Asien Import",     cat:"tropical" },
+      { name:"Navel Orange",                    desc:"Saftig, kernlos, reich an Vitamin C",            tag:"🍊 Frisch",          cat:"local"   },
+      { name:"Schweizer Kirschen",              desc:"Saisonale Spezialität aus der Schweiz",           tag:"🇨🇭 Limitiert",      cat:"local"   },
+      { name:"Drachenfrucht (Pitaya)",          desc:"Mild süss, leuchtend rosa Schale",              tag:"🏝️ Exotisch",       cat:"tropical" },
+      { name:"Himbeeren",                       desc:"Säuerlich-süss, perfekt für Desserts",           tag:"🫐 Frisch",          cat:"berry"   },
+      { name:"Obst-Geschenkbox (Premium)",      desc:"6 premium Früchte, geschenkverpackt",            tag:"🎁 Geschenk",        cat:"gift"    },
+      { name:"Schweizer Obstkorb (Familie)",    desc:"Saisonales Schweizer Obst, 3kg Familienpackung", tag:"🇨🇭 Bestseller",     cat:"local"   },
+      { name:"Passionsfrucht (Frisch)",         desc:"Aromatisch, perfekt für Desserts und Getränke", tag:"🏝️ Tropisch",       cat:"tropical" },
+    ]
+  },
+  fr: {
+    tagline: "Fruits Premium · Livrés en Suisse",
+    cart: "Panier",
+    hero_title: "Fruits Frais,\nLivrés en 24h",
+    hero_sub: "Qualité premium · De la ferme à votre table · 100% garantie\nLivraison dans toute la Suisse 🇨🇭",
+    shop_now: "🛍️ Acheter maintenant",
+    feat1_title: "Livraison Rapide", feat1_desc: "24h CH",
+    feat2_title: "Qualité", feat2_desc: "100% Garantie",
+    feat3_title: "Direct Producteur", feat3_desc: "Sans Intermédiaire",
+    feat4_title: "Paiement Sécurisé", feat4_desc: "PayPal & Carte",
+    shop_title: "🛍️ Acheter des Fruits Frais",
+    cat_all: "Tout", cat_local: "🇨🇭 Suisse", cat_tropical: "🏝️ Tropical",
+    cat_berry: "🫐 Baies", cat_gift: "🎁 Coffret Cadeau",
+    social_title: "📱 Suivez-nous & Commandez sur les Réseaux",
+    social_desc: "Aussi sur Facebook, Instagram & WhatsApp — envoyez-nous un DM !",
+    fb_btn: "Facebook", ig_btn: "Instagram", wa_btn: "WhatsApp",
+    f_about: "À propos", f_delivery: "Livraison", f_contact: "Contact", f_refund: "Remboursement",
+    footer_text: "Livraison de fraîcheur dans toute la Suisse 🇨🇭",
+    cart_title: "Votre Panier", total: "Total (CHF)", checkout: "Passer la commande →",
+    pay_title: "Choisir le mode de paiement", pay_sub: "Sélectionnez votre mode de paiement",
+    pay_paypal_desc: "Paiement en ligne sécurisé · Carte bancaire ou solde PayPal",
+    pay_wa_desc: "Envoyez votre commande via WhatsApp · Rapide et facile",
+    pay_invoice: "Facture (Suisse)", pay_invoice_desc: "Payez après livraison · Virement bancaire ou TWINT",
+    cancel: "← Retour au panier",
+    modal_btn: "Super, merci !",
+    empty_cart: "Votre panier est vide\nDécouvrez nos fruits frais !",
+    wa_float: "Chattez sur WhatsApp",
+    paypal_success_title: "Redirection vers PayPal...",
+    paypal_success_desc: "Vous allez être redirigé vers PayPal.\nVotre résumé de commande a été envoyé.",
+    wa_success_title: "Ouverture de WhatsApp...",
+    wa_success_desc: "Votre commande sera envoyée par WhatsApp.\nAppuyez sur envoyer pour confirmer !",
+    invoice_success_title: "Facture demandée !",
+    invoice_success_desc: "Nous vous enverrons une facture par e-mail.\nPayez après livraison – virement ou TWINT.",
+    wa_message: "Bonjour FreshFruit ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
+    products: [
+      { name:"Pomme Suisse (Waadtländer)",      desc:"Croquante, sucrée, cultivée dans le canton de Vaud", tag:"🇨🇭 Suisse",        cat:"local"   },
+      { name:"Fraises Suisses",                  desc:"Fraîchement cueillies, super sucrées",                tag:"🇨🇭 De Saison",     cat:"local"   },
+      { name:"Mangue (Kent)",                    desc:"Juteuse et sans fibres",                              tag:"🏝️ Tropical",       cat:"tropical" },
+      { name:"Myrtilles (Premium)",              desc:"Grosses, sucrées, riches en antioxydants",            tag:"🫐 Premium",        cat:"berry"   },
+      { name:"Durian Thaï (Congelé)",            desc:"Monthong premium, texture crémeuse",                  tag:"🌟 Import Asie",     cat:"tropical" },
+      { name:"Orange Navel",                     desc:"Juteuse, sans pépins, riche en vitamine C",           tag:"🍊 Frais",          cat:"local"   },
+      { name:"Cerises Suisses",                  desc:"Spécialité de saison suisse",                         tag:"🇨🇭 Édition Limitée",cat:"local"   },
+      { name:"Fruit du Dragon (Pitaya)",          desc:"Légèrement sucré, peau rose vif",                   tag:"🏝️ Exotique",       cat:"tropical" },
+      { name:"Framboises",                       desc:"Sucrées-acidulées, parfaites pour les desserts",     tag:"🫐 Frais",          cat:"berry"   },
+      { name:"Coffret Cadeau Fruits (Premium)",   desc:"Mélange de 6 fruits premium, emballage cadeau",      tag:"🎁 Cadeau",         cat:"gift"    },
+      { name:"Panier de Fruits Suisse (Famille)", desc:"Fruits de saison suisses, pack famille 3kg",          tag:"🇨🇭 Best-Seller",    cat:"local"   },
+      { name:"Fruit de la Passion (Frais)",       desc:"Aromatique, parfait pour desserts et boissons",      tag:"🏝️ Tropical",       cat:"tropical" },
+    ]
+  }
+};
+
+// Chinese product list (read from data-zh attributes)
+const zhProducts = [
+  { name:"瑞士苹果（沃州产）",       desc:"脆甜多汁，皮薄肉厚，沃德州本地种植",       tag:"🇨🇭 瑞士本地",   cat:"local"   },
+  { name:"瑞士草莓",                 desc:"现摘现发，超级甜",                       tag:"🇨🇭 当季水果",   cat:"local"   },
+  { name:"芒果（Kent）",              desc:"多汁无纤维",                              tag:"🏝️ 热带水果",   cat:"tropical" },
+  { name:"蓝莓（优质）",             desc:"个头大，甜，富含抗氧化剂",               tag:"🫐 优质",         cat:"berry"   },
+  { name:"泰国榴莲（冷冻）",         desc:"优质 Monthong，奶油质地",                 tag:"🌟 亚洲进口",     cat:"tropical" },
+  { name:"脐橙",                     desc:"多汁无籽，富含维生素 C",                  tag:"🍊 新鲜",         cat:"local"   },
+  { name:"瑞士樱桃",                 desc:"瑞士当季特产",                           tag:"🇨🇭 限量",        cat:"local"   },
+  { name:"火龙果（Pitaya）",         desc:"微甜，粉红色外皮",                       tag:"🏝️ 异域",         cat:"tropical" },
+  { name:"覆盆子",                   desc:"酸甜适口，适合做甜点",                     tag:"🫐 新鲜",         cat:"berry"   },
+  { name:"水果礼盒（优质）",           desc:"6 款优质水果混合，礼盒包装",                tag:"🎁 礼盒",         cat:"gift"    },
+  { name:"瑞士水果篮（家庭装）",       desc:"当季瑞士水果，3kg 家庭装",                  tag:"🇨🇭 畅销",       cat:"local"   },
+  { name:"百香果（新鲜）",            desc:"芳香，适合甜点和饮品",                      tag:"🏝️ 热带水果",   cat:"tropical" },
+];
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('ff_lang', lang);
+  document.getElementById('htmlRoot').lang = lang === 'de' ? 'de' : lang === 'fr' ? 'fr' : lang === 'zh' ? 'zh' : 'en';
+  document.getElementById('currentLangLabel').textContent = lang.toUpperCase();
+
+  // Update [data-i18n] elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    let val = null;
+    if (lang === 'zh') {
+      val = el.getAttribute('data-zh');
+    } else if (t[lang] && t[lang][key]) {
+      val = t[lang][key];
+    }
+    if (val) {
+      el.innerHTML = val.replace(/\n/g, '<br>');
+    }
+  });
+
+  // Update lang dropdown active state
+  document.querySelectorAll('.lang-opt').forEach(opt => {
+    opt.classList.toggle('active', opt.getAttribute('onclick') === `setLang('${lang}')`);
+  });
+
+  renderProducts(currentCat);
+  renderCart();
+  document.getElementById('langDropdown').classList.remove('open');
+}
+
+function toggleLangMenu() {
+  document.getElementById('langDropdown').classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#langToggle') && !e.target.closest('#langDropdown')) {
+    document.getElementById('langDropdown').classList.remove('open');
+  }
+});
+
+// ===== Product Prices (unit 可选值见下方注释) =====
+// 常用单位参考：
+//   '1kg' = 1公斤      '500g' = 500克      '250g' = 250克
+//   '1pc' = 1个        '3pcs' = 3个        '6pcs' = 6个
+//   '1盒' = 1盒        '1 box' = 1盒       '1 basket' = 1篮
+//   '1份' = 1份        '1 bag' = 1袋       '250g×2' = 250克×2包
+//   '1kg bag' = 1公斤袋装             'small basket' = 小篮
+const productPrices = [
+  { id:1,  price:12.90, unit:'1kg'       },
+  { id:2,  price:8.90,  unit:'500g'      },
+  { id:3,  price:6.50,  unit:'1pc'       },
+  { id:4,  price:9.90,  unit:'250g×2'    },
+  { id:5,  price:29.90, unit:'1kg'       },
+  { id:6,  price:7.90,  unit:'1kg'       },
+  { id:7,  price:14.90, unit:'500g'      },
+  { id:8,  price:8.90,  unit:'1pc'       },
+  { id:9,  price:7.90,  unit:'250g'      },
+  { id:10, price:49.90, unit:'1盒'       },
+  { id:11, price:39.90, unit:'1篮'       },
+  { id:12, price:9.90,  unit:'3pcs'      },
+];
+
+let cart = {};
+let currentCat = 'all';
+
+const emojis = ['🍎','🍓','🥭','🫐','🟡','🍊','🍒','🐉','🔴','🎁','🧺','🟣'];
+
+function getProductInfo(id) {
+  if (currentLang === 'zh') {
+    return zhProducts[id - 1];
+  }
+  const p = productPrices.find(x => x.id === id);
+  const d = t[currentLang].products ? t[currentLang].products[id - 1] : null;
+  return { ...p, ...d };
+}
+
+function renderProducts(cat) {
+  const grid = document.getElementById('productGrid');
+  if (currentLang === 'zh') {
+    const list = cat === 'all' ? zhProducts : zhProducts.filter(p => p.cat === cat);
+    grid.innerHTML = list.map(p => {
+      const price = productPrices.find(x => x.id === p.id);
+      return `
+      <div class="card">
+        <div class="card-img">${emojis[p.id-1]}</div>
+        <div class="card-body">
+          <div class="card-name">${p.name}</div>
+          <div class="card-desc">${p.desc}</div>
+          <div class="card-tag">${p.tag}</div>
+          <div class="card-footer">
+            <div class="card-price">
+              CHF ${price.price.toFixed(2)}
+              <span class="card-unit">/${price.unit}</span>
+            </div>
+            <button class="add-btn" onclick="addToCart(${p.id})">+</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    return;
+  }
+  const allProducts = t[currentLang].products ? t[currentLang].products.map((p,i) => ({...p, id: i+1})) : [];
+  const list = cat === 'all' ? allProducts : allProducts.filter(p => p.cat === cat);
+  grid.innerHTML = list.map(p => {
+    const price = productPrices.find(x => x.id === p.id);
+    return `
+      <div class="card">
+        <div class="card-img">${emojis[p.id-1]}</div>
+        <div class="card-body">
+          <div class="card-name">${p.name}</div>
+          <div class="card-desc">${p.desc}</div>
+          <div class="card-tag">${p.tag}</div>
+          <div class="card-footer">
+            <div class="card-price">
+              CHF ${price.price.toFixed(2)}
+              <span class="card-unit">/${price.unit}</span>
+            </div>
+            <button class="add-btn" onclick="addToCart(${p.id})">+</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function filterCat(el, cat) {
+  document.querySelectorAll('.cat-tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentCat = cat;
+  renderProducts(cat);
+}
+
+function addToCart(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  updateCartBadge();
+}
+
+function removeFromCart(id) {
+  if (cart[id] > 1) cart[id]--;
+  else delete cart[id];
+  renderCart(); updateCartBadge();
+}
+
+function updateCartBadge() {
+  document.getElementById('cartCount').textContent = Object.values(cart).reduce((a,b)=>a+b,0);
+}
+
+function getCartTotal() {
+  return Object.keys(cart).reduce((sum, id) => {
+    const p = productPrices.find(x => x.id == id);
+    return sum + p.price * cart[id];
+  }, 0);
+}
+
+function buildOrderSummary() {
+  return Object.keys(cart).map(id => {
+    const p = getProductInfo(Number(id));
+    return `• ${p.name} ×${cart[id]} — CHF ${(p.price * cart[id]).toFixed(2)}`;
+  }).join('\n');
+}
+
+function renderCart() {
+  const el = document.getElementById('cartItems');
+  const ids = Object.keys(cart);
+  if (ids.length === 0) {
+    el.innerHTML = `<div class="empty-cart"><span>🛒</span>${t[currentLang].empty_cart.replace(/\n/g,'<br>')}</div>`;
+    document.getElementById('cartTotal').textContent = 'CHF 0.00';
+    return;
+  }
+  let total = 0;
+  el.innerHTML = ids.map(id => {
+    const p = getProductInfo(Number(id));
+    const subtotal = p.price * cart[id];
+    total += subtotal;
+    return `
+      <div class="cart-item">
+        <div class="ci-emoji">${emojis[p.id-1]}</div>
+        <div class="ci-info">
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-price">CHF ${p.price.toFixed(2)}/${p.unit} × ${cart[id]} = CHF ${subtotal.toFixed(2)}</div>
+        </div>
+        <div class="ci-ctrl">
+          <button class="ci-btn" onclick="removeFromCart(${p.id})">−</button>
+          <span class="ci-qty">${cart[id]}</span>
+          <button class="ci-btn" onclick="addToCart(${p.id});renderCart()">+</button>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('cartTotal').textContent = 'CHF ' + total.toFixed(2);
+}
+
+function openCart() {
+  renderCart();
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ===== Checkout =====
+function checkout() {
+  if (!Object.keys(cart).length) { alert(t[currentLang].empty_cart.replace(/\n/g, ' ')); return; }
+  closeCart();
+  document.getElementById('paymentModal').classList.add('open');
+}
+function closePaymentModal() {
+  document.getElementById('paymentModal').classList.remove('open');
+}
+
+// ===== PayPal =====
+function payWithPayPal() {
+  document.getElementById('paymentModal').classList.remove('open');
+  const total = getCartTotal().toFixed(2);
+  const items = Object.keys(cart).map(id => {
+    const p = getProductInfo(Number(id));
+    return `${p.name} × ${cart[id]}`;
+  }).join(', ');
+  const paypalURL = 'https://www.paypal.com/cgi-bin/webscr'
+    + '?cmd=_cart&upload=1'
+    + '&business=' + encodeURIComponent(SHOP_CONFIG.paypalEmail)
+    + '&currency_code=' + SHOP_CONFIG.currency
+    + '&item_name_1=' + encodeURIComponent('FreshFruit Order: ' + items)
+    + '&amount_1=' + total
+    + '&return=' + encodeURIComponent(window.location.href)
+    + '&cancel_return=' + encodeURIComponent(window.location.href);
+
+  document.getElementById('successIcon').textContent = '🅿️';
+  document.getElementById('successTitle').textContent = t[currentLang].paypal_success_title;
+  document.getElementById('successDesc').textContent = t[currentLang].paypal_success_desc;
+  document.getElementById('successModal').classList.add('open');
+
+  setTimeout(() => { window.open(paypalURL, '_blank'); }, 1500);
+}
+
+// ===== WhatsApp (ALWAYS send in French to merchant) =====
+function payWithWhatsApp() {
+  document.getElementById('paymentModal').classList.remove('open');
+  const total = getCartTotal().toFixed(2);
+  const orderSummary = buildOrderSummary();
+  let message = t.fr.wa_message
+    .replace('{items}', orderSummary)
+    .replace('{total}', total);
+  const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
+
+  document.getElementById('successIcon').textContent = '💬';
+  document.getElementById('successTitle').textContent = t[currentLang].wa_success_title;
+  document.getElementById('successDesc').textContent = t[currentLang].wa_success_desc;
+  document.getElementById('successModal').classList.add('open');
+
+  setTimeout(() => { window.open(waURL, '_blank'); }, 1500);
+}
+
+function openWhatsApp() {
+  const greeting = t.fr.wa_message
+    .replace('{items}', '')
+    .replace('{total}', '0.00')
+    .replace(/\n\nTotal: CHF 0\.00\n\n/, '\n\n')
+    .replace(/\n\n\n+/g, '\n\n')
+    .trim();
+  const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(greeting);
+  window.open(waURL, '_blank');
+}
+
+// ===== Facebook Messenger =====
+function openFacebookMessenger() {
+  // 所有社交媒体按钮统一跳转到 WhatsApp
+  openWhatsApp();
+}
+
+// ===== Instagram DM =====
+function openInstagramDM() {
+  // 所有社交媒体按钮统一跳转到 WhatsApp
+  openWhatsApp();
+}
+
+// ===== Invoice =====
+function payWithInvoice() {
+  document.getElementById('paymentModal').classList.remove('open');
+  document.getElementById('successIcon').textContent = '📄';
+  document.getElementById('successTitle').textContent = t[currentLang].invoice_success_title;
+  document.getElementById('successDesc').textContent = t[currentLang].invoice_success_desc;
+  document.getElementById('successModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('successModal').classList.remove('open');
+  cart = {};
+  updateCartBadge();
+}
+
+// ===== Init =====
+const savedLang = localStorage.getItem('ff_lang');
+if (['en','de','fr','zh'].includes(savedLang)) {
+  setLang(savedLang);
+} else {
+  renderProducts('all');
+  // Set English defaults
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t.en[key]) el.innerHTML = t.en[key].replace(/\n/g, '<br>');
+  });
+}
+</script>
+</body>
+</html>
