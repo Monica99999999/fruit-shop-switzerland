@@ -4,64 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Le Verger Suisse · Fruits Premium</title>
-  <!-- Favicon & App Icon -->
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Le Vergers">
+  <meta name="apple-mobile-web-app-title" content="Le Verger Suisse">
   <meta name="theme-color" content="#e65100">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background: #fef9f3; color: #333; min-height: 100vh;
-    }
-    header {
-      position: sticky; top: 0; z-index: 100;
-      background: linear-gradient(135deg, #1565c0, #1e88e5);
-      padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
-      box-shadow: 0 2px 12px rgba(21,101,192,0.35);
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: #fef9f3; color: #333; min-height: 100vh; }
+    header { position: sticky; top: 0; z-index: 100; background: linear-gradient(135deg, #1565c0, #1e88e5); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(21,101,192,0.35); }
     .logo { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
     .logo span { font-size: 11px; font-weight: 400; opacity: .85; display: block; }
     .header-right { display: flex; align-items: center; gap: 8px; }
-    .lang-btn {
-      background: rgba(255,255,255,0.25); border: 1.5px solid rgba(255,255,255,0.6);
-      color: #fff; border-radius: 16px; padding: 5px 11px;
-      font-size: 12px; cursor: pointer; font-weight: 600;
-      backdrop-filter: blur(4px);
-    }
-    .cart-btn {
-      background: linear-gradient(135deg, #e65100, #ff9800);
-      border: 2px solid #fff;
-      color: #fff; border-radius: 22px; padding: 7px 14px;
-      font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;
-      font-weight: 700; box-shadow: 0 3px 10px rgba(230,81,0,0.4);
-      transition: transform 0.15s;
-    }
+    .lang-btn { background: rgba(255,255,255,0.25); border: 1.5px solid rgba(255,255,255,0.6); color: #fff; border-radius: 16px; padding: 5px 11px; font-size: 12px; cursor: pointer; font-weight: 600; backdrop-filter: blur(4px); }
+    .cart-btn { background: linear-gradient(135deg, #e65100, #ff9800); border: 2px solid #fff; color: #fff; border-radius: 22px; padding: 7px 14px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 700; box-shadow: 0 3px 10px rgba(230,81,0,0.4); transition: transform 0.15s; }
     .cart-btn:active { transform: scale(0.95); }
-    .cart-count {
-      background: #1565c0; color: #fff; border-radius: 50%; width: 20px; height: 20px;
-      font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 1px 4px rgba(21,101,192,0.5);
-    }
-    .hero {
-      background: linear-gradient(145deg, #e3f2fd, #bbdefb); margin: 12px 12px 0;
-      border-radius: 16px; padding: 24px 18px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
+    .cart-count { background: #1565c0; color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 4px rgba(21,101,192,0.5); }
+    .hero { background: linear-gradient(145deg, #e3f2fd, #bbdefb); margin: 12px 12px 0; border-radius: 16px; padding: 24px 18px; display: flex; align-items: center; justify-content: space-between; }
     .hero-text h2 { font-size: 22px; color: #0d47a1; font-weight: 800; line-height: 1.3; }
     .hero-text p { font-size: 12px; color: #1565c0; margin-top: 6px; line-height: 1.5; }
-    .hero-btn {
-      margin-top: 12px; display: inline-block; background: #1565c0; color: #fff;
-      border-radius: 20px; padding: 9px 18px; font-size: 13px; font-weight: 600;
-      cursor: pointer; border: none;
-    }
+    .hero-btn { margin-top: 12px; display: inline-block; background: #1565c0; color: #fff; border-radius: 20px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
     .hero-emoji { font-size: 60px; line-height: 1; }
-    .features { display: flex; gap: 0; background: #fff; margin: 12px 12px 0;
-      border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .features { display: flex; gap: 0; background: #fff; margin: 12px 12px 0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .feat-item { flex: 1; padding: 12px 4px; text-align: center; font-size: 10px; color: #666; }
     .feat-item + .feat-item { border-left: 1px solid #f5f5f5; }
     .feat-icon { font-size: 22px; display: block; margin-bottom: 3px; }
@@ -69,41 +35,25 @@
     .section-title { font-size: 15px; font-weight: 700; color: #333; padding: 16px 12px 8px; }
     .categories { display: flex; gap: 8px; padding: 0 12px 6px; overflow-x: auto; scrollbar-width: none; }
     .categories::-webkit-scrollbar { display: none; }
-    .cat-tag {
-      flex-shrink: 0; background: #fff; border: 1.5px solid #bbdefb;
-      border-radius: 18px; padding: 6px 14px; font-size: 12px; color: #555; cursor: pointer; transition: all .2s;
-    }
+    .cat-tag { flex-shrink: 0; background: #fff; border: 1.5px solid #bbdefb; border-radius: 18px; padding: 6px 14px; font-size: 12px; color: #555; cursor: pointer; transition: all .2s; }
     .cat-tag.active, .cat-tag:hover { background: #1565c0; border-color: #1565c0; color: #fff; }
     .products { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 4px 12px 20px; }
-    .card { background: #fff; border-radius: 14px; overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.07); transition: transform .2s; }
+    .card { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); transition: transform .2s; }
     .card:active { transform: scale(0.97); }
-    .card-img { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
-      font-size: 56px; background: #e3f2fd; }
+    .card-img { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 56px; background: #e3f2fd; }
     .card-body { padding: 9px 10px 10px; }
     .card-name { font-size: 13px; font-weight: 600; color: #222; line-height: 1.3; }
     .card-desc { font-size: 10px; color: #999; margin-top: 3px; line-height: 1.4; }
-    .card-tag { display: inline-block; background: #e3f2fd; color: #1565c0; border-radius: 8px;
-      padding: 2px 7px; font-size: 9px; font-weight: 600; margin-top: 4px; }
+    .card-tag { display: inline-block; background: #e3f2fd; color: #1565c0; border-radius: 8px; padding: 2px 7px; font-size: 9px; font-weight: 600; margin-top: 4px; }
     .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 7px; }
     .card-price { font-size: 15px; font-weight: 800; color: #e65100; }
     .card-unit { font-size: 11px; font-weight: 500; color: #666; margin-left: 2px; }
-    .add-btn {
-      background: #1565c0; color: #fff; border: none; border-radius: 50%;
-      width: 28px; height: 28px; font-size: 18px; cursor: pointer; line-height: 1;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 8px rgba(21,101,192,0.4);
-    }
+    .add-btn { background: #1565c0; color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 18px; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(21,101,192,0.4); }
     .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; }
     .cart-overlay.open { display: block; }
-    .cart-panel {
-      position: fixed; right: 0; top: 0; bottom: 0; width: min(92vw, 400px);
-      background: #fff; z-index: 201; transform: translateX(100%); transition: transform .3s ease;
-      display: flex; flex-direction: column;
-    }
+    .cart-panel { position: fixed; right: 0; top: 0; bottom: 0; width: min(92vw, 400px); background: #fff; z-index: 201; transform: translateX(100%); transition: transform .3s ease; display: flex; flex-direction: column; }
     .cart-panel.open { transform: translateX(0); }
-    .cart-header { background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff;
-      padding: 16px 16px 12px; display: flex; align-items: center; justify-content: space-between; }
+    .cart-header { background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff; padding: 16px 16px 12px; display: flex; align-items: center; justify-content: space-between; }
     .cart-header h3 { font-size: 17px; font-weight: 700; }
     .close-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
     .cart-items { flex: 1; overflow-y: auto; padding: 12px; }
@@ -115,19 +65,13 @@
     .ci-name { font-size: 13px; font-weight: 600; }
     .ci-price { font-size: 12px; color: #e65100; margin-top: 2px; }
     .ci-ctrl { display: flex; align-items: center; gap: 6px; }
-    .ci-btn { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #ddd; background: #fff;
-      font-size: 15px; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
+    .ci-btn { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #ddd; background: #fff; font-size: 15px; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
     .ci-qty { font-size: 14px; font-weight: 600; min-width: 18px; text-align: center; }
     .cart-footer { padding: 12px; border-top: 1px solid #f0f0f0; }
     .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .cart-total span { font-size: 14px; color: #666; }
     .cart-total strong { font-size: 20px; color: #e65100; font-weight: 800; }
-    .checkout-btn {
-      width: 100%; background: linear-gradient(135deg, #1565c0, #1e88e5);
-      color: #fff; border: none; border-radius: 24px; padding: 14px;
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      box-shadow: 0 4px 16px rgba(21,101,192,0.4);
-    }
+    .checkout-btn { width: 100%; background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff; border: none; border-radius: 24px; padding: 14px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(21,101,192,0.4); }
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: none; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
     .checkout-modal { background: #fff; border-radius: 20px; padding: 24px 18px; width: min(92vw, 380px); animation: popIn .3s ease; }
@@ -137,10 +81,7 @@
     .cm-header h3 { font-size: 18px; font-weight: 700; color: #333; margin-top: 6px; }
     .cm-header p { font-size: 12px; color: #888; margin-top: 4px; }
     .pay-options { display: flex; flex-direction: column; gap: 10px; }
-    .pay-card {
-      display: flex; align-items: center; gap: 12px; border: 2px solid #e0e0e0;
-      border-radius: 14px; padding: 14px 14px; cursor: pointer; transition: all .2s;
-    }
+    .pay-card { display: flex; align-items: center; gap: 12px; border: 2px solid #e0e0e0; border-radius: 14px; padding: 14px 14px; cursor: pointer; transition: all .2s; }
     .pay-card:active { transform: scale(0.98); }
     .pay-card.paypal { border-color: #003087; background: #f5f8ff; }
     .pay-card.paypal:hover { box-shadow: 0 2px 12px rgba(0,48,135,0.2); }
@@ -159,47 +100,22 @@
     .success-modal h3 { font-size: 18px; font-weight: 700; color: #333; }
     .success-modal p { font-size: 13px; color: #888; margin-top: 7px; line-height: 1.6; }
     .success-btn { margin-top: 18px; background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff; border: none; border-radius: 20px; padding: 11px 32px; font-size: 14px; font-weight: 600; cursor: pointer; }
-    .wa-float {
-      position: fixed; bottom: 20px; right: 16px; z-index: 150;
-      width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: #fff; border: none;
-      font-size: 30px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.5);
-      display: flex; align-items: center; justify-content: center; transition: transform .2s;
-    }
+    .wa-float { position: fixed; bottom: 20px; right: 16px; z-index: 150; width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: #fff; border: none; font-size: 30px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.5); display: flex; align-items: center; justify-content: center; transition: transform .2s; }
     .wa-float:active { transform: scale(0.9); }
-    .wa-float::after {
-      content: ''; position: absolute; inset: -4px; border-radius: 50%;
-      border: 2px solid #25d366; animation: waPulse 2s infinite;
-    }
+    .wa-float::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #25d366; animation: waPulse 2s infinite; }
     @keyframes waPulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.3); opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
-    .wa-tooltip {
-      position: absolute; right: 64px; top: 50%; transform: translateY(-50%);
-      background: #333; color: #fff; font-size: 11px; white-space: nowrap;
-      padding: 6px 12px; border-radius: 14px; pointer-events: none; opacity: 0; transition: opacity .3s;
-    }
+    .wa-tooltip { position: absolute; right: 64px; top: 50%; transform: translateY(-50%); background: #333; color: #fff; font-size: 11px; white-space: nowrap; padding: 6px 12px; border-radius: 14px; pointer-events: none; opacity: 0; transition: opacity .3s; }
     .wa-float:hover .wa-tooltip { opacity: 1; }
     .social-section { margin: 0 12px 16px; background: #fff; border-radius: 14px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .social-title { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 10px; }
     .social-btns { display: flex; flex-wrap: wrap; gap: 8px; }
-    .fb-btn {
-      display: inline-flex; align-items: center; gap: 6px; background: #1877f2; color: #fff;
-      border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
-    }
-    .ig-btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); color: #fff;
-      border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
-    }
-    .wa-btn-social {
-      display: inline-flex; align-items: center; gap: 6px; background: #25d366; color: #fff;
-      border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
-    }
+    .fb-btn { display: inline-flex; align-items: center; gap: 6px; background: #1877f2; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .ig-btn { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .wa-btn-social { display: inline-flex; align-items: center; gap: 6px; background: #25d366; color: #fff; border: none; border-radius: 20px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
     footer { text-align: center; padding: 20px 12px; font-size: 11px; color: #ccc; border-top: 1px solid #f0f0f0; background: #fafafa; }
     .footer-links { margin-top: 8px; }
     .footer-links a { color: #1565c0; text-decoration: none; margin: 0 6px; font-size: 12px; }
-    .lang-dropdown {
-      position: absolute; top: 44px; right: 60px; background: #fff; border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15); overflow: hidden; z-index: 150; display: none;
-    }
+    .lang-dropdown { position: absolute; top: 44px; right: 60px; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); overflow: hidden; z-index: 150; display: none; }
     .lang-dropdown.open { display: block; }
     .lang-opt { padding: 10px 22px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
     .lang-opt:hover { background: #e3f2fd; }
@@ -211,7 +127,7 @@
 <!-- Header -->
 <header style="position:relative;">
   <div class="logo">
-    🍎 FreshFruit
+    🍎 Le Verger Suisse
     <span data-i18n="tagline" data-zh="精选水果 · 瑞士直送"></span>
   </div>
   <div class="header-right">
@@ -233,8 +149,7 @@
 <div class="hero">
   <div class="hero-text">
     <h2 data-i18n="hero_title" data-zh="新鲜水果，24小时内送达"></h2>
-    <p data-i18n="hero_sub" data-zh="优质品质 · 农场直达餐桌 · 100% 保证
-全瑞士配送 🇨🇭"></p>
+    <p data-i18n="hero_sub" data-zh="优质品质 · 农场直达餐桌 · 100% 保证 &#10;全瑞士配送 🇨🇭"></p>
     <button class="hero-btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})" data-i18n="shop_now" data-zh="🛍️ 立即选购"></button>
   </div>
   <div class="hero-emoji">🍊🍇🍓</div>
@@ -296,7 +211,7 @@
 
 <!-- Footer -->
 <footer>
-  © 2026 FreshFruit · <span data-i18n="footer_text" data-zh="新鲜送达全瑞士 🇨🇭"></span><br>
+  © 2026 Le Verger Suisse · <span data-i18n="footer_text" data-zh="新鲜送达全瑞士 🇨🇭"></span><br>
   <div class="footer-links">
     <a href="#" data-i18n="f_about" data-zh="关于我们"></a>
     <a href="#" data-i18n="f_delivery" data-zh="配送说明"></a>
@@ -382,7 +297,7 @@ const SHOP_CONFIG = {
   paypalEmail: 'superfruitsvalais@outlook.com',
   whatsappNumber: '41796495089',
   currency: 'CHF',
-  shopName: 'FreshFruit',
+  shopName: 'Le Verger Suisse',
 };
 
 // ===== i18n Translations (EN/DE/FR in JS, ZH read from data-zh attribute) =====
@@ -420,7 +335,7 @@ const t = {
     wa_success_desc: "Your order details will be sent as a WhatsApp message.\nJust tap send to confirm!",
     invoice_success_title: "Invoice Requested!",
     invoice_success_desc: "We'll send you an invoice by email.\nPay after delivery — bank transfer or TWINT.",
-    wa_message: "Hello FreshFruit! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
+    wa_message: "Hello Le Verger Suisse! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
     products: [
       { name:"Swiss Apricots (Valais)",      desc:"Sweet, juicy, sun-ripened in Valais",      tag:"🇨🇭 Swiss Local",   cat:"local"   },
       { name:"Swiss Apple (Waadtländer)",     desc:"Crispy, sweet, locally grown in Vaud",          tag:"🇨🇭 Swiss Local",   cat:"local"   },
@@ -430,7 +345,7 @@ const t = {
       { name:"Thai Durian (Frozen)",            desc:"Premium Monthong, creamy texture",              tag:"🌟 Asian Import",     cat:"tropical" },
       { name:"Navel Orange",                    desc:"Juicy, seedless, rich in vitamin C",           tag:"🍊 Fresh",           cat:"local"   },
       { name:"Swiss Cherry",                    desc:"Seasonal specialty from Switzerland",            tag:"🇨🇭 Limited",        cat:"local"   },
-      { name:"Dragon Fruit (Pitaya)",            desc:"Mildly sweet, vibrant pink skin",             tag:"🏝️ Exotic",         cat:"tropical" },
+      { name:"Dragon Fruit (Pitaya)",          desc:"Mildly sweet, vibrant pink skin",             tag:"🏝️ Exotic",         cat:"tropical" },
       { name:"Raspberries",                     desc:"Tart and sweet, perfect for desserts",         tag:"🫐 Fresh",           cat:"berry"   },
       { name:"Fruit Gift Box (Premium)",         desc:"Mix of 6 premium fruits, gift wrapped",        tag:"🎁 Gift",            cat:"gift"    },
       { name:"Swiss Fruit Basket (Family Pack)", desc:"Seasonal Swiss fruits, 3kg family pack",       tag:"🇨🇭 Best Seller",    cat:"local"   },
@@ -440,7 +355,7 @@ const t = {
   de: {
     tagline: "Premium Obst · Geliefert in der Schweiz",
     cart: "Warenkorb",
-    hero_title: "Frisches Obst,\ninnert 24h geliefert",
+    hero_title: "Frisches Obst,\nnnert 24h geliefert",
     hero_sub: "Premium Qualität · Vom Feld auf den Tisch · 100% Garantie\nVersand in ganz Schweiz 🇨🇭",
     shop_now: "🛍️ Jetzt einkaufen",
     feat1_title: "Schnelle Lieferung", feat1_desc: "24h CH",
@@ -470,15 +385,15 @@ const t = {
     wa_success_desc: "Ihre Bestelldaten werden als WhatsApp-Nachricht gesendet.\nTippen Sie auf Senden zum Bestätigen!",
     invoice_success_title: "Rechnung angefordert!",
     invoice_success_desc: "Wir senden Ihnen eine Rechnung per E-Mail.\nBezahlen Sie nach Lieferung – Banküberweisung oder TWINT.",
-    wa_message: "Hallo FreshFruit! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
+    wa_message: "Hallo Le Verger Suisse! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
     products: [
       { name:"Schweizer Aprikosen (Wallis)", desc:"Süss, saftig, sonnenreif aus dem Wallis", tag:"🇨🇭 Schweizer Obst", cat:"local"   },
       { name:"Schweizer Apfel (Waadtländer)",  desc:"Knackig, süss, aus dem Kanton Waadt",            tag:"🇨🇭 Schweizer Obst",  cat:"local"   },
       { name:"Schweizer Erdbeeren",             desc:"Frisch gepflückt, super süss",                  tag:"🇨🇭 Saisonal",       cat:"local"   },
-      { name:"Mango (Kent)",                   desc:"Saftig und faserfrei",                           tag:"🏝️ Tropisch",       cat:"tropical" },
+      { name:"Mango (Kent)",                   desc:"Safig und faserfrei",                           tag:"🏝️ Tropisch",       cat:"tropical" },
       { name:"Blaubeeren (Premium)",            desc:"Gross, süss, reich an Antioxidantien",           tag:"🫐 Premium",         cat:"berry"   },
       { name:"Thai-Durian (Gefroren)",          desc:"Premium Monthong, cremige Textur",               tag:"🌟 Asien Import",     cat:"tropical" },
-      { name:"Navel Orange",                    desc:"Saftig, kernlos, reich an Vitamin C",            tag:"🍊 Frisch",          cat:"local"   },
+      { name:"Navel Orange",                    desc:"Safig, kernlos, reich an Vitamin C",            tag:"🍊 Frisch",          cat:"local"   },
       { name:"Schweizer Kirschen",              desc:"Saisonale Spezialität aus der Schweiz",           tag:"🇨🇭 Limitiert",      cat:"local"   },
       { name:"Drachenfrucht (Pitaya)",          desc:"Mild süss, leuchtend rosa Schale",              tag:"🏝️ Exotisch",       cat:"tropical" },
       { name:"Himbeeren",                       desc:"Säuerlich-süss, perfekt für Desserts",           tag:"🫐 Frisch",          cat:"berry"   },
@@ -520,7 +435,7 @@ const t = {
     wa_success_desc: "Votre commande sera envoyée par WhatsApp.\nAppuyez sur envoyer pour confirmer !",
     invoice_success_title: "Facture demandée !",
     invoice_success_desc: "Nous vous enverrons une facture par e-mail.\nPayez après livraison – virement ou TWINT.",
-    wa_message: "Bonjour FreshFruit ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
+    wa_message: "Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
     products: [
       { name:"Abricots Suisses (Valais)",    desc:"Sucrés, juteux, mûris au soleil à Valais", tag:"🇨🇭 Suisse",        cat:"local"   },
       { name:"Pomme Suisse (Waadtländer)",      desc:"Croquante, sucrée, cultivée dans le canton de Vaud", tag:"🇨🇭 Suisse",        cat:"local"   },
@@ -539,72 +454,23 @@ const t = {
   }
 };
 
-// Chinese product list (read from data-zh attributes)
+// Chinese product list — IDs MUST match productPrices
 const zhProducts = [
-  { name:"瑞士杏子（瓦莱产）",       desc:"甜美多汁，瓦莱州阳光熟成",               tag:"🇨🇭 瑞士本地",   cat:"local"   },
-  { name:"瑞士苹果（沃州产）",       desc:"脆甜多汁，皮薄肉厚，沃德州本地种植",       tag:"🇨🇭 瑞士本地",   cat:"local"   },
-  { name:"瑞士草莓",                 desc:"现摘现发，超级甜",                       tag:"🇨🇭 当季水果",   cat:"local"   },
-  { name:"芒果（Kent）",              desc:"多汁无纤维",                              tag:"🏝️ 热带水果",   cat:"tropical" },
-  { name:"蓝莓（优质）",             desc:"个头大，甜，富含抗氧化剂",               tag:"🫐 优质",         cat:"berry"   },
-  { name:"泰国榴莲（冷冻）",         desc:"优质 Monthong，奶油质地",                 tag:"🌟 亚洲进口",     cat:"tropical" },
-  { name:"脐橙",                     desc:"多汁无籽，富含维生素 C",                  tag:"🍊 新鲜",         cat:"local"   },
-  { name:"瑞士樱桃",                 desc:"瑞士当季特产",                           tag:"🇨🇭 限量",        cat:"local"   },
-  { name:"火龙果（Pitaya）",         desc:"微甜，粉红色外皮",                       tag:"🏝️ 异域",         cat:"tropical" },
-  { name:"覆盆子",                   desc:"酸甜适口，适合做甜点",                     tag:"🫐 新鲜",         cat:"berry"   },
-  { name:"水果礼盒（优质）",           desc:"6 款优质水果混合，礼盒包装",                tag:"🎁 礼盒",         cat:"gift"    },
-  { name:"瑞士水果篮（家庭装）",       desc:"当季瑞士水果，3kg 家庭装",                  tag:"🇨🇭 畅销",       cat:"local"   },
-  { name:"百香果（新鲜）",            desc:"芳香，适合甜点和饮品",                      tag:"🏝️ 热带水果",   cat:"tropical" },
+  { id:1,  name:"瑞士杏子（瓦莱产）",       desc:"甜美多汁，瓦莱州阳光熟成",               tag:"🇨🇭 瑞士本地",   cat:"local"   },
+  { id:2,  name:"瑞士苹果（沃州产）",       desc:"脆甜多汁，皮薄肉厚，沃德州本地种植",       tag:"🇨🇭 瑞士本地",   cat:"local"   },
+  { id:3,  name:"瑞士草莓",                 desc:"现摘现发，超级甜",                       tag:"🇨🇭 当季水果",   cat:"local"   },
+  { id:4,  name:"芒果（Kent）",              desc:"多汁无纤维",                              tag:"🏝️ 热带水果",   cat:"tropical" },
+  { id:5,  name:"蓝莓（优质）",             desc:"个头大，甜，富含抗氧化剂",               tag:"🫐 优质",         cat:"berry"   },
+  { id:6,  name:"泰国榴莲（冷冻）",         desc:"优质 Monthong，奶油质地",                 tag:"🌟 亚洲进口",     cat:"tropical" },
+  { id:7,  name:"脐橙",                     desc:"多汁无籽，富含维生素 C",                  tag:"🍊 新鲜",         cat:"local"   },
+  { id:8,  name:"瑞士樱桃",                 desc:"瑞士当季特产",                           tag:"🇨🇭 限量",        cat:"local"   },
+  { id:9,  name:"火龙果（Pitaya）",         desc:"微甜，粉红色外皮",                       tag:"🏝️ 异域",         cat:"tropical" },
+  { id:10, name:"覆盆子",                   desc:"酸甜适口，适合做甜点",                     tag:"🫐 新鲜",         cat:"berry"   },
+  { id:11, name:"水果礼盒（优质）",           desc:"6 款优质水果混合，礼盒包装",                tag:"🎁 礼盒",         cat:"gift"    },
+  { id:12, name:"瑞士水果篮（家庭装）",       desc:"当季瑞士水果，3kg 家庭装",                  tag:"🇨🇭 畅销",       cat:"local"   },
+  { id:13, name:"百香果（新鲜）",            desc:"芳香，适合甜点和饮品",                      tag:"🏝️ 热带水果",   cat:"tropical" },
 ];
 
-let currentLang = 'en';
-
-function setLang(lang) {
-  currentLang = lang;
-  localStorage.setItem('ff_lang', lang);
-  document.getElementById('htmlRoot').lang = lang === 'de' ? 'de' : lang === 'fr' ? 'fr' : lang === 'zh' ? 'zh' : 'en';
-  document.getElementById('currentLangLabel').textContent = lang.toUpperCase();
-
-  // Update [data-i18n] elements
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    let val = null;
-    if (lang === 'zh') {
-      val = el.getAttribute('data-zh');
-    } else if (t[lang] && t[lang][key]) {
-      val = t[lang][key];
-    }
-    if (val) {
-      el.innerHTML = val.replace(/\n/g, '<br>');
-    }
-  });
-
-  // Update lang dropdown active state
-  document.querySelectorAll('.lang-opt').forEach(opt => {
-    opt.classList.toggle('active', opt.getAttribute('onclick') === `setLang('${lang}')`);
-  });
-
-  renderProducts(currentCat);
-  renderCart();
-  document.getElementById('langDropdown').classList.remove('open');
-}
-
-function toggleLangMenu() {
-  document.getElementById('langDropdown').classList.toggle('open');
-}
-
-document.addEventListener('click', e => {
-  if (!e.target.closest('#langToggle') && !e.target.closest('#langDropdown')) {
-    document.getElementById('langDropdown').classList.remove('open');
-  }
-});
-
-// ===== Product Prices (unit 可选值见下方注释) =====
-// 常用单位参考：
-//   '1kg' = 1公斤      '500g' = 500克      '250g' = 250克
-//   '1pc' = 1个        '3pcs' = 3个        '6pcs' = 6个
-//   '1盒' = 1盒        '1 box' = 1盒       '1 basket' = 1篮
-//   '1份' = 1份        '1 bag' = 1袋       '250g×2' = 250克×2包
-//   '1kg bag' = 1公斤袋装             'small basket' = 小篮
 const productPrices = [
   { id:1,  price:14.90, unit:'500g'      },
   { id:2,  price:12.90, unit:'1kg'       },
@@ -624,15 +490,19 @@ const productPrices = [
 let cart = {};
 let currentCat = 'all';
 
-const emojis = ['🍎','🍓','🥭','🫐','🟡','🍊','🍒','🐉','🔴','🎁','🧺','🟣'];
+// Emoji array — MUST match productPrices ID order
+// ID 1=杏子, 2=苹果, 3=草莓, 4=芒果, 5=蓝莓, 6=榴莲, 7=脐橙, 8=樱桃, 9=火龙果, 10=覆盆子, 11=礼盒, 12=水果篮, 13=百香果
+const emojis = ['📸','🍎','🍓','🥭','🫐','🍈','🍊','🍒','🐉','🫐','🎁','🧺','🟣'];
 
 function getProductInfo(id) {
   if (currentLang === 'zh') {
-    return zhProducts[id - 1];
+    const p = zhProducts.find(x => x.id === id);
+    const price = productPrices.find(x => x.id === id);
+    return { ...p, ...price };
   }
-  const p = productPrices.find(x => x.id === id);
   const d = t[currentLang].products ? t[currentLang].products[id - 1] : null;
-  return { ...p, ...d };
+  const price = productPrices.find(x => x.id === id);
+  return { ...d, ...price };
 }
 
 function renderProducts(cat) {
@@ -641,18 +511,14 @@ function renderProducts(cat) {
     const list = cat === 'all' ? zhProducts : zhProducts.filter(p => p.cat === cat);
     grid.innerHTML = list.map(p => {
       const price = productPrices.find(x => x.id === p.id);
-      return `
-      <div class="card">
+      return `<div class="card">
         <div class="card-img">${emojis[p.id-1]}</div>
         <div class="card-body">
           <div class="card-name">${p.name}</div>
           <div class="card-desc">${p.desc}</div>
           <div class="card-tag">${p.tag}</div>
           <div class="card-footer">
-            <div class="card-price">
-              CHF ${price.price.toFixed(2)}
-              <span class="card-unit">/${price.unit}</span>
-            </div>
+            <div class="card-price">CHF ${price.price.toFixed(2)}<span class="card-unit">/${price.unit}</span></div>
             <button class="add-btn" onclick="addToCart(${p.id})">+</button>
           </div>
         </div>
@@ -664,18 +530,14 @@ function renderProducts(cat) {
   const list = cat === 'all' ? allProducts : allProducts.filter(p => p.cat === cat);
   grid.innerHTML = list.map(p => {
     const price = productPrices.find(x => x.id === p.id);
-    return `
-      <div class="card">
+    return `<div class="card">
         <div class="card-img">${emojis[p.id-1]}</div>
         <div class="card-body">
           <div class="card-name">${p.name}</div>
           <div class="card-desc">${p.desc}</div>
           <div class="card-tag">${p.tag}</div>
           <div class="card-footer">
-            <div class="card-price">
-              CHF ${price.price.toFixed(2)}
-              <span class="card-unit">/${price.unit}</span>
-            </div>
+            <div class="card-price">CHF ${price.price.toFixed(2)}<span class="card-unit">/${price.unit}</span></div>
             <button class="add-btn" onclick="addToCart(${p.id})">+</button>
           </div>
         </div>
@@ -732,8 +594,7 @@ function renderCart() {
     const p = getProductInfo(Number(id));
     const subtotal = p.price * cart[id];
     total += subtotal;
-    return `
-      <div class="cart-item">
+    return `<div class="cart-item">
         <div class="ci-emoji">${emojis[p.id-1]}</div>
         <div class="ci-info">
           <div class="ci-name">${p.name}</div>
@@ -783,7 +644,7 @@ function payWithPayPal() {
     + '?cmd=_cart&upload=1'
     + '&business=' + encodeURIComponent(SHOP_CONFIG.paypalEmail)
     + '&currency_code=' + SHOP_CONFIG.currency
-    + '&item_name_1=' + encodeURIComponent('FreshFruit Order: ' + items)
+    + '&item_name_1=' + encodeURIComponent('Le Verger Suisse Order: ' + items)
     + '&amount_1=' + total
     + '&return=' + encodeURIComponent(window.location.href)
     + '&cancel_return=' + encodeURIComponent(window.location.href);
@@ -818,7 +679,7 @@ function openWhatsApp() {
   const greeting = t.fr.wa_message
     .replace('{items}', '')
     .replace('{total}', '0.00')
-    .replace(/\n\nTotal: CHF 0\.00\n\n/, '\n\n')
+    .replace(/\n\nTotal : CHF 0\.00\n\n/, '\n\n')
     .replace(/\n\n\n+/g, '\n\n')
     .trim();
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(greeting);
@@ -827,13 +688,11 @@ function openWhatsApp() {
 
 // ===== Facebook Messenger =====
 function openFacebookMessenger() {
-  // 所有社交媒体按钮统一跳转到 WhatsApp
   openWhatsApp();
 }
 
 // ===== Instagram DM =====
 function openInstagramDM() {
-  // 所有社交媒体按钮统一跳转到 WhatsApp
   openWhatsApp();
 }
 
@@ -851,6 +710,49 @@ function closeModal() {
   cart = {};
   updateCartBadge();
 }
+
+// ===== Language =====
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('ff_lang', lang);
+  document.getElementById('htmlRoot').lang = lang === 'de' ? 'de' : lang === 'fr' ? 'fr' : lang === 'zh' ? 'zh' : 'en';
+  document.getElementById('currentLangLabel').textContent = lang.toUpperCase();
+
+  // Update [data-i18n] elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    let val = null;
+    if (lang === 'zh') {
+      val = el.getAttribute('data-zh');
+    } else if (t[lang] && t[lang][key]) {
+      val = t[lang][key];
+    }
+    if (val) {
+      el.innerHTML = val.replace(/\n/g, '<br>');
+    }
+  });
+
+  // Update lang dropdown active state
+  document.querySelectorAll('.lang-opt').forEach(opt => {
+    opt.classList.toggle('active', opt.getAttribute('onclick') === `setLang('${lang}')`);
+  });
+
+  renderProducts(currentCat);
+  renderCart();
+  document.getElementById('langDropdown').classList.remove('open');
+}
+
+function toggleLangMenu() {
+  document.getElementById('langDropdown').classList.toggle('open');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#langToggle') && !e.target.closest('#langDropdown')) {
+    document.getElementById('langDropdown').classList.remove('open');
+  }
+});
 
 // ===== Init =====
 const savedLang = localStorage.getItem('ff_lang');
