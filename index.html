@@ -652,6 +652,56 @@ function getPaymentGuide(lang) {
   return guides[lang] || guides.en;
 }
 
+// Build bilingual WhatsApp message: client language + French for merchant
+function buildBilingualMessage(lang) {
+  const totalStr = getCartTotal().toFixed(2);
+  const frSummary = buildOrderSummaryFR();
+  const frGuide = getPaymentGuide('fr');
+
+  if (lang === 'fr') {
+    // French client: only send French version
+    let msg = t.fr.wa_message
+      .replace('{items}', frSummary)
+      .replace('{total}', totalStr);
+    msg += frGuide;
+    return msg;
+  }
+
+  // Client language version
+  let clientSummary = buildOrderSummaryLang(lang);
+  let clientGuide = getPaymentGuide(lang);
+  let clientMsg = (t[lang] ? t[lang].wa_message : t.en.wa_message)
+    .replace('{items}', clientSummary || '(please check cart)')
+    .replace('{total}', totalStr);
+  clientMsg += clientGuide;
+
+  // French version for merchant
+  let frMsg = t.fr.wa_message
+    .replace('{items}', frSummary)
+    .replace('{total}', totalStr);
+  frMsg += frGuide;
+
+  return clientMsg + '\n\n——— Version française ———\n' + frMsg;
+}
+
+// Build order summary in a specific language
+function buildOrderSummaryLang(lang) {
+  const langKey = lang === 'zh' ? 'zhProducts' : (lang === 'fr' ? 'fr' : lang);
+  return Object.keys(cart).map(id => {
+    const price = productPrices.find(x => x.id == id);
+    let name = '';
+    if (lang === 'zh') {
+      const p = (typeof zhProducts !== 'undefined') ? zhProducts.find(x => x.id == id) : null;
+      name = p ? p.name : '';
+    } else if (t[lang] && t[lang].products) {
+      const d = t[lang].products[Number(id) - 1];
+      name = d ? d.name : '';
+    }
+    if (!price || !name) return '';
+    return `• ${name} ×${cart[id]} — CHF ${(price.price * cart[id]).toFixed(2)}`;
+  }).filter(line => line).join('\n');
+}
+
 function renderCart() {
   const el = document.getElementById('cartItems');
   const ids = Object.keys(cart);
@@ -747,12 +797,7 @@ function payWithWhatsApp() {
     rawTotal = sum;
   }
   const totalStr = rawTotal.toFixed(2);
-  const orderSummary = buildOrderSummaryFR();
-  let message = t.fr.wa_message
-    .replace('{items}', orderSummary || '(Veuillez vérifier le panier)')
-    .replace('{total}', totalStr);
-  // Append payment guide in client's own language
-  message += getPaymentGuide(currentLang);
+  const message = buildBilingualMessage(currentLang);
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
 
   // Synchronous redirect — avoids iOS Safari popup blocker
@@ -761,18 +806,10 @@ function payWithWhatsApp() {
 }
 
 function openWhatsApp() {
-  // If cart has items, send full order; otherwise send simple greeting
   const hasItems = Object.keys(cart).length > 0;
   let message = '';
   if (hasItems) {
-    // Send full order in French
-    const totalStr = getCartTotal().toFixed(2);
-    const orderSummary = buildOrderSummaryFR();
-    message = t.fr.wa_message
-      .replace('{items}', orderSummary)
-      .replace('{total}', totalStr);
-    // Append payment guide in client's own language
-    message += getPaymentGuide(currentLang);
+    message = buildBilingualMessage(currentLang);
   } else {
     // Simple greeting (always French to merchant)
     message = 'Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander. Veuillez me contacter. Merci !';
