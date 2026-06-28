@@ -631,6 +631,16 @@ function buildOrderSummary() {
   }).filter(line => line).join('\n');
 }
 
+// Build order summary ALWAYS in French (for WhatsApp messages to merchant)
+function buildOrderSummaryFR() {
+  return Object.keys(cart).map(id => {
+    const price = productPrices.find(x => x.id == id);
+    const frProd = t.fr.products ? t.fr.products[Number(id) - 1] : null;
+    if (!price || !frProd || !frProd.name) return '';
+    return `• ${frProd.name} ×${cart[id]} — CHF ${(price.price * cart[id]).toFixed(2)}`;
+  }).filter(line => line).join('\n');
+}
+
 function renderCart() {
   const el = document.getElementById('cartItems');
   const ids = Object.keys(cart);
@@ -726,9 +736,9 @@ function payWithWhatsApp() {
     rawTotal = sum;
   }
   const totalStr = rawTotal.toFixed(2);
-  const orderSummary = buildOrderSummary();
+  const orderSummary = buildOrderSummaryFR();
   let message = t.fr.wa_message
-    .replace('{items}', orderSummary || '（请查看购物车）')
+    .replace('{items}', orderSummary || '(Veuillez vérifier le panier)')
     .replace('{total}', totalStr);
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
 
@@ -744,7 +754,7 @@ function openWhatsApp() {
   if (hasItems) {
     // Send full order in French
     const totalStr = getCartTotal().toFixed(2);
-    const orderSummary = buildOrderSummary();
+    const orderSummary = buildOrderSummaryFR();
     message = t.fr.wa_message
       .replace('{items}', orderSummary)
       .replace('{total}', totalStr);
@@ -753,7 +763,7 @@ function openWhatsApp() {
     message = 'Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander. Veuillez me contacter. Merci !';
   }
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
-  window.open(waURL, '_blank');
+  window.location.href = waURL;
 }
 
 // ===== Share Website (Copy link + WhatsApp share) =====
