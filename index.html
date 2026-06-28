@@ -745,13 +745,21 @@ function payWithWhatsApp() {
 }
 
 function openWhatsApp() {
-  const greeting = t.fr.wa_message
-    .replace('{items}', '')
-    .replace('{total}', '0.00')
-    .replace(/\n\nTotal : CHF 0\.00\n\n/, '\n\n')
-    .replace(/\n\n\n+/g, '\n\n')
-    .trim();
-  const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(greeting);
+  // If cart has items, send full order; otherwise send simple greeting
+  const hasItems = Object.keys(cart).length > 0;
+  let message = '';
+  if (hasItems) {
+    // Send full order in French
+    const totalStr = getCartTotal().toFixed(2);
+    const orderSummary = buildOrderSummary();
+    message = t.fr.wa_message
+      .replace('{items}', orderSummary)
+      .replace('{total}', totalStr);
+  } else {
+    // Simple greeting (always French to merchant)
+    message = 'Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander. Veuillez me contacter. Merci !';
+  }
+  const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
   window.open(waURL, '_blank');
 }
 
