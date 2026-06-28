@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Le Verger Suisse · Fruits Premium</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
@@ -615,6 +618,7 @@ function updateCartBadge() {
 function getCartTotal() {
   return Object.keys(cart).reduce((sum, id) => {
     const p = productPrices.find(x => x.id == id);
+    if (!p) return sum;
     return sum + p.price * cart[id];
   }, 0);
 }
@@ -622,8 +626,9 @@ function getCartTotal() {
 function buildOrderSummary() {
   return Object.keys(cart).map(id => {
     const p = getProductInfo(Number(id));
+    if (!p || !p.name) return '';
     return `• ${p.name} ×${cart[id]} — CHF ${(p.price * cart[id]).toFixed(2)}`;
-  }).join('\n');
+  }).filter(line => line).join('\n');
 }
 
 function renderCart() {
