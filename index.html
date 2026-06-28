@@ -716,11 +716,24 @@ function payWithPayPal() {
 // ===== WhatsApp (ALWAYS send in French to merchant) =====
 function payWithWhatsApp() {
   document.getElementById('paymentModal').classList.remove('open');
-  const total = getCartTotal().toFixed(2);
+  // Debug: save cart to localStorage for recovery
+  localStorage.setItem('ff_cart_backup', JSON.stringify(cart));
+  let rawTotal = getCartTotal();
+  if (rawTotal === 0) {
+    // fallback: recalc from backup
+    const backup = JSON.parse(localStorage.getItem('ff_cart_backup') || '{}');
+    let sum = 0;
+    Object.keys(backup).forEach(id => {
+      const p = productPrices.find(x => x.id == id);
+      if (p) sum += p.price * backup[id];
+    });
+    rawTotal = sum;
+  }
+  const totalStr = rawTotal.toFixed(2);
   const orderSummary = buildOrderSummary();
   let message = t.fr.wa_message
-    .replace('{items}', orderSummary)
-    .replace('{total}', total);
+    .replace('{items}', orderSummary || '（请查看购物车）')
+    .replace('{total}', totalStr);
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
 
   document.getElementById('successIcon').textContent = '💬';
