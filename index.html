@@ -705,12 +705,8 @@ function payWithPayPal() {
     + '&return=' + encodeURIComponent(window.location.href)
     + '&cancel_return=' + encodeURIComponent(window.location.href);
 
-  document.getElementById('successIcon').textContent = '🅿️';
-  document.getElementById('successTitle').textContent = t[currentLang].paypal_success_title;
-  document.getElementById('successDesc').textContent = t[currentLang].paypal_success_desc;
-  document.getElementById('successModal').classList.add('open');
-
-  setTimeout(() => { window.open(paypalURL, '_blank'); }, 1500);
+  // Synchronous redirect — avoids iOS Safari popup blocker
+  window.location.href = paypalURL;
 }
 
 // ===== WhatsApp (ALWAYS send in French to merchant) =====
@@ -736,12 +732,9 @@ function payWithWhatsApp() {
     .replace('{total}', totalStr);
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
 
-  document.getElementById('successIcon').textContent = '💬';
-  document.getElementById('successTitle').textContent = t[currentLang].wa_success_title;
-  document.getElementById('successDesc').textContent = t[currentLang].wa_success_desc;
-  document.getElementById('successModal').classList.add('open');
-
-  setTimeout(() => { window.open(waURL, '_blank'); }, 1500);
+  // Synchronous redirect — avoids iOS Safari popup blocker
+  // wa.me links open WhatsApp app directly, current page stays as-is
+  window.location.href = waURL;
 }
 
 function openWhatsApp() {
