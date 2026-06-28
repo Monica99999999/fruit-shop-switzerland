@@ -208,6 +208,25 @@
       <span data-i18n="wa_btn" data-zh="WhatsApp"></span>
     </button>
   </div>
+  <!-- Share button -->
+  <div style="margin-top: 16px; text-align: center;">
+    <button class="share-btn" onclick="shareWebsite()" style="
+      background: linear-gradient(135deg, #e65100, #ff9800);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 28px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(230,81,0,0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    ">
+      📤 <span data-i18n="share_btn" data-zh="分享这家店给朋友">分享这家店给朋友</span>
+    </button>
+  </div>
 </div>
 
 <!-- Footer -->
@@ -328,6 +347,10 @@ const t = {
     pay_invoice: "Invoice (Switzerland)", pay_invoice_desc: "Pay after delivery · Bank transfer or TWINT",
     cancel: "← Back to cart",
     modal_btn: "Great, thanks!",
+    share_text: "Check out Le Verger Suisse for premium Swiss fruits! 🍎",
+    share_btn: "Share this shop with friends",
+    copied: "Link copied! Send it to your friends 📲",
+    copy_link: "Copy this link:",
     empty_cart: "Your cart is empty\nBrowse our fresh fruits!",
     wa_float: "Order via WhatsApp",
     paypal_success_title: "Redirecting to PayPal...",
@@ -378,6 +401,10 @@ const t = {
     pay_invoice: "Rechnung (Schweiz)", pay_invoice_desc: "Nach Lieferung bezahlen · Banküberweisung oder TWINT",
     cancel: "← Zurück zum Warenkorb",
     modal_btn: "Super, danke!",
+    share_text: "Entdecken Sie Le Verger Suisse für premium Obst in der Schweiz! 🍎",
+    share_btn: "Diesen Shop teilen",
+    copied: "Link kopiert! Schicken Sie ihn an Ihre Freunde 📲",
+    copy_link: "Kopieren Sie diesen Link:",
     empty_cart: "Dein Warenkorb ist leer\nStöbere in unserem frischen Obst!",
     wa_float: "Chat auf WhatsApp",
     paypal_success_title: "Weiterleitung zu PayPal...",
@@ -428,6 +455,10 @@ const t = {
     pay_invoice: "Facture (Suisse)", pay_invoice_desc: "Payez après livraison · Virement bancaire ou TWINT",
     cancel: "← Retour au panier",
     modal_btn: "Super, merci !",
+    share_text: "Découvrez Le Verger Suisse pour des fruits premium en Suisse ! 🍎",
+    share_btn: "Partager cette boutique",
+    copied: "Lien copié ! Envoyez-le à vos amis 📲",
+    copy_link: "Copiez ce lien :",
     empty_cart: "Votre panier est vide\nDécouvrez nos fruits frais !",
     wa_float: "Chattez sur WhatsApp",
     paypal_success_title: "Redirection vers PayPal...",
@@ -696,6 +727,68 @@ function openWhatsApp() {
     .trim();
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(greeting);
   window.open(waURL, '_blank');
+}
+
+// ===== Share Website (Copy link + WhatsApp share) =====
+function shareWebsite() {
+  const shareUrl = window.location.href;
+  // Get share text in current language
+  let shareText = '';
+  if (currentLang === 'zh') {
+    shareText = '来看看 Le Verger Suisse 的优质瑞士水果！🍎 ' + shareUrl;
+  } else {
+    shareText = (t[currentLang].share_text || 'Check out Le Verger Suisse for premium Swiss fruits! 🍎') + '\n' + shareUrl;
+  }
+
+  // Try Web Share API first (works on iPhone Safari)
+  if (navigator.share) {
+    navigator.share({
+      title: 'Le Verger Suisse',
+      text: shareText,
+      url: shareUrl
+    }).catch(() => {
+      // User cancelled, fallback to copy
+      copyToClipboardFallback(shareUrl);
+    });
+  } else {
+    // Fallback: copy to clipboard
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        alert(getShareMsg('copied'));
+      }).catch(() => {
+        copyToClipboardFallback(shareUrl);
+      });
+    } else {
+      copyToClipboardFallback(shareUrl);
+    }
+  }
+}
+
+function getShareMsg(key) {
+  if (currentLang === 'zh') {
+    const zhMsgs = {
+      copied: '連結已複製！發給你的朋友 📲',
+      copy_link: '複製這個連結：'
+    };
+    return zhMsgs[key] || key;
+  }
+  return t[currentLang][key] || key;
+}
+
+function copyToClipboardFallback(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand('copy');
+    alert(getShareMsg('copied'));
+  } catch(e) {
+    prompt(getShareMsg('copy_link'), text);
+  }
+  document.body.removeChild(ta);
 }
 
 // ===== Facebook Messenger =====
