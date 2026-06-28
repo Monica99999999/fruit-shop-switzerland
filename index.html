@@ -26,7 +26,7 @@
     .hero-text h2 { font-size: 22px; color: #0d47a1; font-weight: 800; line-height: 1.3; }
     .hero-text p { font-size: 15px; color: #0d47a1; margin-top: 8px; line-height: 1.6; font-weight: 500; }
     .hero-btn { margin-top: 12px; display: inline-block; background: #1565c0; color: #fff; border-radius: 20px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
-    .hero-emoji { font-size: 60px; line-height: 1; }
+    .hero-emoji { font-size: 52px; line-height: 1.15; text-align: center; display: flex; flex-direction: column; gap: 4px; }
     .features { display: flex; gap: 0; background: #fff; margin: 12px 12px 0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .feat-item { flex: 1; padding: 12px 4px; text-align: center; font-size: 10px; color: #666; }
     .feat-item + .feat-item { border-left: 1px solid #f5f5f5; }
@@ -149,11 +149,11 @@
 <!-- Hero -->
 <div class="hero">
   <div class="hero-text">
-    <h2 data-i18n="hero_title" data-zh="新鲜水果，24小时内送达"></h2>
-    <p data-i18n="hero_sub" data-zh="优质品质 · 农场直达餐桌 · 100% 保证 &#10;全瑞士配送 🇨🇭"></p>
+    <h2 data-i18n="hero_title" data-zh="瓦萊水果，用心種植"></h2>
+    <p data-i18n="hero_sub" data-zh="從我們的樹上到您的餐桌 &#10;陽光杏子 + 清脆蘋果·果園手工採摘直達·全瑞士配送 🇨🇭"></p>
     <button class="hero-btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})" data-i18n="shop_now" data-zh="🛍️ 立即选购"></button>
   </div>
-  <div class="hero-emoji">🍊🍇🍓</div>
+  <div class="hero-emoji"><span>🍑</span><br><span>🍎</span></div>
 </div>
 
 <!-- Features -->
@@ -325,8 +325,8 @@ const t = {
   en: {
     tagline: "Premium Fruits · Delivered in Switzerland",
     cart: "Cart",
-    hero_title: "Fresh Fruits,\nDelivered in 24h",
-    hero_sub: "Premium quality · Farm to table · 100% guarantee\nShipping across Switzerland 🇨🇭",
+    hero_title: "Valais Fruits, Grown with Heart",
+    hero_sub: "From our trees to your table\nSun-ripened apricots + crisp apples · Hand-picked from the orchard · Across Switzerland 🇨🇭",
     shop_now: "🛍️ Shop Now",
     feat1_title: "Fast Delivery", feat1_desc: "24h CH",
     feat2_title: "Quality", feat2_desc: "100% Guarantee",
@@ -379,8 +379,8 @@ const t = {
   de: {
     tagline: "Premium Obst · Geliefert in der Schweiz",
     cart: "Warenkorb",
-    hero_title: "Frisches Obst,\nnnert 24h geliefert",
-    hero_sub: "Premium Qualität · Vom Feld auf den Tisch · 100% Garantie\nVersand in ganz Schweiz 🇨🇭",
+    hero_title: "Walliser Früchte, mit Herz gezogen",
+    hero_sub: "Von unseren Bäumen zu Ihrem Tisch\nSonnige Aprikosen + knackige Äpfel · Handgepflückt vom Obstgarten · In ganz Schweiz 🇨🇭",
     shop_now: "🛍️ Jetzt einkaufen",
     feat1_title: "Schnelle Lieferung", feat1_desc: "24h CH",
     feat2_title: "Qualität", feat2_desc: "100% Garantie",
@@ -433,8 +433,8 @@ const t = {
   fr: {
     tagline: "Fruits Premium · Livrés en Suisse",
     cart: "Panier",
-    hero_title: "Fruits Frais,\nLivrés en 24h",
-    hero_sub: "Qualité premium · De la ferme à votre table · 100% garantie\nLivraison dans toute la Suisse 🇨🇭",
+    hero_title: "Fruits du Valais, cultivés avec passion",
+    hero_sub: "De nos arbres à votre table\nAbricots gorgés de soleil + pommes croquantes · Cueillis à la main au verger · Livraison toute la Suisse 🇨🇭",
     shop_now: "🛍️ Acheter maintenant",
     feat1_title: "Livraison Rapide", feat1_desc: "24h CH",
     feat2_title: "Qualité", feat2_desc: "100% Garantie",
