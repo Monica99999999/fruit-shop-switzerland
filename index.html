@@ -829,10 +829,10 @@ function getPaymentGuide(lang) {
   const method = deliveryInfo.payMethod || 'twint';
   const guides = {
     twint: {
-      zh: '\n💳 付款方式：📱 TWINT（079 649 50 89）\n請用 TWINT App 掃碼或輸入手機號付款。',
-      en: '\n💳 Payment: 📱 TWINT (079 649 50 89)\nPlease pay via TWINT App.',
-      de: '\n💳 Zahlung: 📱 TWINT (079 649 50 89)\nBitte bezahlen Sie via TWINT App.',
-      fr: '\n💳 Paiement : 📱 TWINT (079 649 50 89)\nVeuillez payer via l\'application TWINT.'
+      zh: '\n💳 付款方式：📱 TWINT（079 649 50 89）\n請用 TWINT App 掃碼或輸入手機號付款，並在付款備註中註明訂單編號。',
+      en: '\n💳 Payment: 📱 TWINT (079 649 50 89)\nPlease pay via TWINT App and include the order number in the payment reference.',
+      de: '\n💳 Zahlung: 📱 TWINT (079 649 50 89)\nBitte bezahlen Sie via TWINT App und geben Sie die Bestellnummer als Zahlungsreferenz an.',
+      fr: '\n💳 Paiement : 📱 TWINT (079 649 50 89)\nVeuillez payer via l\'application TWINT et indiquer le numéro de commande comme référence de paiement.'
     },
     bank: {
       zh: '\n💳 付款方式：🏦 銀行轉帳\n商家確認訂單後將發送 QR 帳單給您，付款後發貨。',
