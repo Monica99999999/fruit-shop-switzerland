@@ -295,23 +295,23 @@
 <div class="modal-overlay" id="adminModal">
   <div class="admin-modal-box">
     <div id="adminLogin" class="admin-login">
-      <h3>🔐 商家管理</h3>
-      <p style="font-size:12px;color:#888;margin:6px 0 14px;">請輸入管理密碼查看訂單記錄</p>
-      <input type="password" id="adminPassword" placeholder="管理密碼" onkeydown="if(event.key==='Enter')adminLogin()">
-      <button onclick="adminLogin()">登入</button>
-      <br><button onclick="closeAdmin()" style="background:none;border:none;color:#999;margin-top:12px;cursor:pointer;">取消</button>
+      <h3>🔐 Administration</h3>
+      <p style="font-size:12px;color:#888;margin:6px 0 14px;">Veuillez entrer le mot de passe pour accéder aux commandes</p>
+      <input type="password" id="adminPassword" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')adminLogin()">
+      <button onclick="adminLogin()">Se connecter</button>
+      <br><button onclick="closeAdmin()" style="background:none;border:none;color:#999;margin-top:12px;cursor:pointer;">Annuler</button>
     </div>
     <div id="adminPanel" class="admin-panel">
       <div class="admin-header">
-        <h3>📋 歷史訂單</h3>
+        <h3>📋 Historique des commandes</h3>
         <button onclick="closeAdmin()" style="background:none;border:none;font-size:20px;cursor:pointer;">×</button>
       </div>
       <div class="admin-header">
         <select id="orderFilter" onchange="renderAdminOrders()">
-          <option value="all">全部訂單</option>
+          <option value="all">Toutes les commandes</option>
           <option value="TWINT">📱 TWINT</option>
           <option value="VIR">🏦 銀行轉帳</option>
-          <option value="ESP">💵 現金</option>
+          <option value="ESP">💵 Espèces</option>
         </select>
         <span class="order-count" id="orderCount"></span>
       </div>
@@ -319,24 +319,24 @@
         <table class="order-table">
           <thead>
             <tr>
-              <th>訂單編號</th>
-              <th>日期</th>
-              <th>姓名</th>
-              <th>電話</th>
-              <th>地址</th>
-              <th>商品</th>
-              <th>金額</th>
-              <th>付款</th>
-              <th>狀態</th>
+              <th>N° de commande</th>
+              <th>Date</th>
+              <th>Nom</th>
+              <th>Téléphone</th>
+              <th>Adresse</th>
+              <th>Produits</th>
+              <th>Montant</th>
+              <th>Paiement</th>
+              <th>Statut</th>
             </tr>
           </thead>
           <tbody id="orderTableBody"></tbody>
         </table>
       </div>
       <div class="admin-actions">
-        <button onclick="exportOrdersCSV()">📥 匯出 CSV</button>
-        <button class="danger" onclick="clearOrders()">🗑 清除記錄</button>
-        <button onclick="closeAdmin()">關閉</button>
+        <button onclick="exportOrdersCSV()">📥 Exporter CSV</button>
+        <button class="danger" onclick="clearOrders()">🗑 Effacer</button>
+        <button onclick="closeAdmin()">Fermer</button>
       </div>
     </div>
   </div>
@@ -1354,7 +1354,7 @@ function adminLogin() {
     document.getElementById('adminPanel').classList.add('show');
     renderAdminOrders();
   } else {
-    alert('密碼錯誤');
+    alert('Mot de passe incorrect');
   }
 }
 
@@ -1402,13 +1402,13 @@ function renderAdminOrders() {
   });
   if (migrated) localStorage.setItem('ff_orders', JSON.stringify(orders));
   const filtered = filter === 'all' ? orders : orders.filter(o => o.payMethod && o.id.includes('-' + filter + '-'));
-  document.getElementById('orderCount').textContent = '共 ' + filtered.length + ' 筆';
+  document.getElementById('orderCount').textContent = filtered.length + ' commande(s)';
 
   const payLabels = { twint: '📱 TWINT', bank: '🏦 轉帳', cash: '💵 現金' };
   const badgeClass = { twint: 'badge-twint', bank: 'badge-bank', cash: 'badge-cash' };
 
   document.getElementById('orderTableBody').innerHTML = filtered.length === 0
-    ? '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:20px;">尚無訂單記錄</td></tr>'
+    ? '<tr><td colspan="9" style="text-align:center;color:#aaa;padding:20px;">Aucune commande enregistrée</td></tr>'
     : filtered.map(o => {
         const items = (o.items || []).map(i => i.name + ' ×' + i.qty).join(', ');
         const date = o.time ? (() => {
@@ -1423,11 +1423,11 @@ function renderAdminOrders() {
         const pm = o.payMethod || 'twint';
         const status = o.status || 'pending';
         const statusOptions = [
-          { value: 'pending', label: '⏳ 待確認', color: '#f57f17' },
-          { value: 'confirmed', label: '✅ 已確認', color: '#1565c0' },
-          { value: 'paid', label: '💰 已付款', color: '#2e7d32' },
-          { value: 'shipped', label: '🚚 已發貨', color: '#6a1b9a' },
-          { value: 'completed', label: '🎉 已完成', color: '#e65100' }
+          { value: 'pending', label: '⏳ En attente', color: '#f57f17' },
+          { value: 'confirmed', label: '✅ Confirmé', color: '#1565c0' },
+          { value: 'paid', label: '💰 Payé', color: '#2e7d32' },
+          { value: 'shipped', label: '🚚 Expédié', color: '#6a1b9a' },
+          { value: 'completed', label: '🎉 Terminé', color: '#e65100' }
         ];
         const statusSelect = '<select onchange="updateOrderStatus(\'' + o.id + '\', this.value)" style="font-size:11px;padding:2px 4px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;">' +
           statusOptions.map(s => '<option value="' + s.value + '"' + (status === s.value ? ' selected' : '') + '>' + s.label + '</option>').join('') +
@@ -1458,7 +1458,7 @@ function updateOrderStatus(orderId, newStatus) {
 function exportOrdersCSV() {
   const orders = JSON.parse(localStorage.getItem('ff_orders') || '[]');
   if (orders.length === 0) { alert('尚無訂單記錄'); return; }
-  let csv = '\uFEFF訂單編號,日期,姓名,電話,電郵,地址,付款方式,商品,金額(CHF),狀態\n';
+  let csv = '\uFEFFN° commande,Date,Nom,Téléphone,Email,Adresse,Paiement,Produits,Montant (CHF),Statut\n';
   orders.forEach(o => {
     const items = (o.items || []).map(i => i.name + ' ×' + i.qty).join('; ');
     const date = o.time ? (() => {
