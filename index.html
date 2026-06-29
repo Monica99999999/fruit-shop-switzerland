@@ -113,6 +113,13 @@
     .invoice-form .btn-row { display: flex; gap: 8px; margin-top: 16px; }
     .invoice-form .btn-confirm { flex: 1; padding: 12px; background: linear-gradient(135deg,#e65100,#ff9800); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
     .invoice-form .btn-cancel { padding: 12px 16px; background: #f5f5f5; color: #888; border: none; border-radius: 10px; font-size: 13px; cursor: pointer; }
+    /* Payment method selector */
+    .pay-method-select { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .pay-method-opt { flex: 1; min-width: 80px; padding: 10px 6px; border: 2px solid #ddd; border-radius: 10px; text-align: center; font-size: 12px; cursor: pointer; transition: all .2s; background: #fff; font-family: inherit; color: #555; }
+    .pay-method-opt.active { border-color: #e65100; background: #fff3e0; color: #e65100; font-weight: 700; }
+    .pay-method-opt .pm-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+    .bank-transfer-note { display: none; background: #fff8e1; border-radius: 10px; padding: 10px 12px; font-size: 12px; color: #6d4c00; margin-top: 8px; line-height: 1.6; }
+    .bank-transfer-note.show { display: block; }
     .success-btn { margin-top: 18px; background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff; border: none; border-radius: 20px; padding: 11px 32px; font-size: 14px; font-weight: 600; cursor: pointer; }
     .wa-float { position: fixed; bottom: 20px; right: 16px; z-index: 150; width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: #fff; border: none; font-size: 30px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.5); display: flex; align-items: center; justify-content: center; transition: transform .2s; }
     .wa-float:active { transform: scale(0.9); }
@@ -336,6 +343,19 @@
       <input type="email" id="delEmail" data-i18n="delivery_email_ph" data-zh="your@email.com" placeholder="your@email.com">
       <label data-i18n="delivery_addr" data-zh="📍 配送地址"><span>*</span></label>
       <textarea id="delAddr" data-i18n="delivery_addr_ph" data-zh="街道、門牌、郵編、城市" placeholder="Street, No., ZIP, City"></textarea>
+      <label data-i18n="delivery_paymethod" data-zh="💳 付款方式"><span>*</span></label>
+      <div class="pay-method-select" id="payMethodSelector">
+        <div class="pay-method-opt active" onclick="selectPayMethod('twint')" id="pm-twint">
+          <span class="pm-icon">📱</span><span data-i18n="pm_twint" data-zh="TWINT"></span>
+        </div>
+        <div class="pay-method-opt" onclick="selectPayMethod('bank')" id="pm-bank">
+          <span class="pm-icon">🏦</span><span data-i18n="pm_bank" data-zh="銀行轉帳"></span>
+        </div>
+        <div class="pay-method-opt" onclick="selectPayMethod('cash')" id="pm-cash">
+          <span class="pm-icon">💵</span><span data-i18n="pm_cash" data-zh="現金"></span>
+        </div>
+      </div>
+      <div class="bank-transfer-note" id="bankTransferNote" data-i18n="bank_transfer_note" data-zh="🏦 銀行轉帳說明：商家確認訂單後，將通過 WhatsApp 或電郵發送 QR 帳單給您。收到帳單後，用您的銀行 App 掃碼即可付款。收貨後付款，安全可靠。"></div>
       <div class="btn-row">
         <button class="btn-confirm" id="deliveryConfirmBtn" data-i18n="delivery_confirm" data-zh="確認並繼續付款"></button>
         <button class="btn-cancel" onclick="closeDeliveryModal()" data-i18n="delivery_cancel" data-zh="取消"></button>
@@ -410,6 +430,11 @@ const t = {
     delivery_addr_ph: "Street, No., ZIP, City",
     delivery_confirm: "Confirm & Continue to Payment",
     delivery_cancel: "Cancel",
+    delivery_paymethod: "💳 Payment Method",
+    pm_twint: "TWINT",
+    pm_bank: "Bank Transfer",
+    pm_cash: "Cash",
+    bank_transfer_note: "🏦 Bank transfer: After the merchant confirms your order, a QR invoice will be sent to you via WhatsApp or email. Scan the QR code with your banking app to pay. Pay after delivery — safe and reliable.",
     wa_message: "Hello Le Verger Suisse! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
     products: [
       { name:"Swiss Apricots (Valais)",      desc:"Sweet, juicy, sun-ripened in Valais",      tag:"🇨🇭 Swiss Local",   cat:"local"   },
@@ -477,6 +502,11 @@ const t = {
     delivery_addr_ph: "Strasse, Nr., PLZ, Stadt",
     delivery_confirm: "Bestätigen & zur Zahlung",
     delivery_cancel: "Abbrechen",
+    delivery_paymethod: "💳 Zahlungsmethode",
+    pm_twint: "TWINT",
+    pm_bank: "Banküberweisung",
+    pm_cash: "Barzahlung",
+    bank_transfer_note: "🏦 Banküberweisung: Nach Bestätigung sendet Ihnen der Händler eine QR-Rechnung per WhatsApp oder E-Mail. Scannen Sie den QR-Code mit Ihrer Banking-App. Bezahlen Sie nach Lieferung – sicher und zuverlässig.",
     wa_message: "Hallo Le Verger Suisse! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
     products: [
       { name:"Schweizer Aprikosen (Wallis)", desc:"Süss, saftig, sonnenreif aus dem Wallis", tag:"🇨🇭 Schweizer Obst", cat:"local"   },
@@ -544,6 +574,11 @@ const t = {
     delivery_addr_ph: "Rue, No., CP, Ville",
     delivery_confirm: "Confirmer et continuer le paiement",
     delivery_cancel: "Annuler",
+    delivery_paymethod: "💳 Mode de paiement",
+    pm_twint: "TWINT",
+    pm_bank: "Virement bancaire",
+    pm_cash: "Espèces",
+    bank_transfer_note: "🏦 Virement bancaire : Après confirmation, le commerçant vous enverra une QR-facture par WhatsApp ou e-mail. Scannez le QR code avec votre app bancaire pour payer. Payez après livraison — sûr et fiable.",
     wa_message: "Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
     products: [
       { name:"Abricots Suisses (Valais)",    desc:"Sucrés, juteux, mûris au soleil à Valais", tag:"🇨🇭 Suisse",        cat:"local"   },
@@ -712,15 +747,30 @@ function buildOrderSummaryFR() {
   }).filter(line => line).join('\n');
 }
 
-// Payment guide text in client's own language (shown in WhatsApp preview)
+// Payment guide text — shows only the customer's selected payment method
 function getPaymentGuide(lang) {
+  const method = deliveryInfo.payMethod || 'twint';
   const guides = {
-    zh: '\n💳 付款方式任選：\n• TWINT：079 649 50 89\n• 銀行轉帳（QR 帳單依需求提供）\n• 現金：僅限果園現場\n\n🏡 歡迎到果園現場洽談批量採購！',
-    en: '\n💳 Payment options:\n• TWINT: 079 649 50 89\n• Bank transfer (QR invoice on request)\n• Cash: only on-site at the farm\n\n🏡 Welcome to discuss bulk purchases at the farm!',
-    de: '\n💳 Zahlungsoptionen:\n• TWINT: 079 649 50 89\n• Banküberweisung (QR-Rechnung auf Anfrage)\n• Barzahlung: nur vor Ort auf dem Bauernhof\n\n🏡 Herzlich willkommen, um Großbestellungen auf dem Bauernhof zu besprechen!',
-    fr: '\n💳 Paiement au choix :\n• TWINT : 079 649 50 89\n• Virement bancaire (QR-facture sur demande)\n• Espèces : uniquement sur place à la ferme\n\n🏡 Bienvenue à la ferme pour discuter d\'achats en gros !'
+    twint: {
+      zh: '\n💳 付款方式：📱 TWINT（079 649 50 89）\n請用 TWINT App 掃碼或輸入手機號付款。',
+      en: '\n💳 Payment: 📱 TWINT (079 649 50 89)\nPlease pay via TWINT App.',
+      de: '\n💳 Zahlung: 📱 TWINT (079 649 50 89)\nBitte bezahlen Sie via TWINT App.',
+      fr: '\n💳 Paiement : 📱 TWINT (079 649 50 89)\nVeuillez payer via l\'application TWINT.'
+    },
+    bank: {
+      zh: '\n💳 付款方式：🏦 銀行轉帳\n商家確認訂單後將發送 QR 帳單給您。收貨後付款。',
+      en: '\n💳 Payment: 🏦 Bank transfer\nThe merchant will send you a QR invoice after order confirmation. Pay after delivery.',
+      de: '\n💳 Zahlung: 🏦 Banküberweisung\nDer Händler sendet Ihnen nach Auftragsbestätigung eine QR-Rechnung. Bezahlen Sie nach Lieferung.',
+      fr: '\n💳 Paiement : 🏦 Virement bancaire\nLe commerçant vous enverra une QR-facture après confirmation. Payez après livraison.'
+    },
+    cash: {
+      zh: '\n💳 付款方式：💵 現金（僅限果園現場自取）\n歡迎到果園現場自取並付款。',
+      en: '\n💳 Payment: 💵 Cash (on-site pick-up only)\nWelcome to pick up and pay at the farm.',
+      de: '\n💳 Zahlung: 💵 Barzahlung (nur bei Abholung vor Ort)\nWillkommen zur Abholung und Bezahlung auf dem Bauernhof.',
+      fr: '\n💳 Paiement : 💵 Espèces (retrait à la ferme uniquement)\nBienvenue à la ferme pour retirer et payer votre commande.'
+    }
   };
-  return guides[lang] || guides.en;
+  return (guides[method] && guides[method][lang]) ? guides[method][lang] : (guides[method] ? guides[method].en : '');
 }
 
 // Build bilingual WhatsApp message: client language + French for merchant
@@ -864,6 +914,16 @@ function generateOrderId() {
 let pendingPaymentMethod = '';
 let currentOrderId = '';
 let deliveryInfo = {};
+let selectedPayMethod = 'twint'; // default
+
+function selectPayMethod(method) {
+  selectedPayMethod = method;
+  // Update UI
+  document.querySelectorAll('.pay-method-opt').forEach(el => el.classList.remove('active'));
+  document.getElementById('pm-' + method).classList.add('active');
+  // Show/hide bank transfer note
+  document.getElementById('bankTransferNote').classList.toggle('show', method === 'bank');
+}
 
 function startCheckout(method) {
   pendingPaymentMethod = method;
@@ -905,7 +965,7 @@ function submitDeliveryForm() {
   if (!addr) { alert(a.addr); return; }
 
   // Save for next time
-  deliveryInfo = { name, phone, email, addr };
+  deliveryInfo = { name, phone, email, addr, payMethod: selectedPayMethod };
   localStorage.setItem('ff_delivery_info', JSON.stringify(deliveryInfo));
 
   // Generate order ID
@@ -927,15 +987,22 @@ function buildDeliveryBlockFR() {
   block += '📞 ' + deliveryInfo.phone + '\n';
   if (deliveryInfo.email) block += '📧 ' + deliveryInfo.email + '\n';
   block += '📍 ' + deliveryInfo.addr + '\n';
+  const pmLabels = { twint: '📱 TWINT', bank: '🏦 Virement bancaire', cash: '💵 Espèces' };
+  block += '💳 Paiement choisi : ' + (pmLabels[deliveryInfo.payMethod] || 'Non spécifié') + '\n';
   return block;
 }
 
 function buildDeliveryBlockLang(lang) {
   const labels = {
-    zh: { order: '📦 訂單編號：', name: '👤', phone: '📞', email: '📧', addr: '📍' },
-    en: { order: '📦 Order No.: ', name: '👤', phone: '📞', email: '📧', addr: '📍' },
-    de: { order: '📦 Bestellnr.: ', name: '👤', phone: '📞', email: '📧', addr: '📍' },
-    fr: { order: '📦 N° de commande : ', name: '👤', phone: '📞', email: '📧', addr: '📍' }
+    zh: { order: '📦 訂單編號：', name: '👤', phone: '📞', email: '📧', addr: '📍', pay: '💳 選擇的付款方式：' },
+    en: { order: '📦 Order No.: ', name: '👤', phone: '📞', email: '📧', addr: '📍', pay: '💳 Payment method: ' },
+    de: { order: '📦 Bestellnr.: ', name: '👤', phone: '📞', email: '📧', addr: '📍', pay: '💳 Zahlungsmethode: ' },
+    fr: { order: '📦 N° de commande : ', name: '👤', phone: '📞', email: '📧', addr: '📍', pay: '💳 Paiement choisi : ' }
+  };
+  const pmLabels = {
+    twint: { zh: '📱 TWINT', en: '📱 TWINT', de: '📱 TWINT', fr: '📱 TWINT' },
+    bank: { zh: '🏦 銀行轉帳', en: '🏦 Bank transfer', de: '🏦 Banküberweisung', fr: '🏦 Virement bancaire' },
+    cash: { zh: '💵 現金', en: '💵 Cash', de: '💵 Barzahlung', fr: '💵 Espèces' }
   };
   const l = labels[lang] || labels.en;
   let block = l.order + currentOrderId + '\n';
@@ -943,6 +1010,7 @@ function buildDeliveryBlockLang(lang) {
   block += l.phone + ' ' + deliveryInfo.phone + '\n';
   if (deliveryInfo.email) block += l.email + ' ' + deliveryInfo.email + '\n';
   block += l.addr + ' ' + deliveryInfo.addr + '\n';
+  block += l.pay + (pmLabels[deliveryInfo.payMethod] ? pmLabels[deliveryInfo.payMethod][lang] || pmLabels[deliveryInfo.payMethod].en : '') + '\n';
   return block;
 }
 
@@ -1093,7 +1161,6 @@ function payWithInvoice() {
   message += buildDeliveryBlockFR();
   message += '\n🛒 Commande :\n' + frSummary;
   message += '\n\nTotal : CHF ' + totalStr;
-  message += '\n\n💳 Paiement :\n• TWINT : 079 649 50 89\n• Virement bancaire (QR-facture sur demande)\n• Espèces : uniquement sur place à la ferme';
   message += '\n\nVeuillez envoyer la facture. Merci !';
 
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
