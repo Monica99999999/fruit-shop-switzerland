@@ -380,6 +380,14 @@
         </div>
         <div class="pay-arrow">→</div>
       </div>
+      <div class="pay-card invoice" onclick="startCheckout('invoice')">
+        <div class="pay-icon">📄</div>
+        <div class="pay-info">
+          <strong data-i18n="pay_invoice" data-zh="账单（瑞士）"></strong>
+          <span data-i18n="pay_invoice_desc" data-zh="先收货后付款 · 银行转账"></span>
+        </div>
+        <div class="pay-arrow">→</div>
+      </div>
     </div>
     <button class="cm-close" onclick="closePaymentModal()" data-i18n="cancel" data-zh="← 返回购物车"></button>
   </div>
@@ -1008,6 +1016,21 @@ function startCheckout(method) {
   // Update icon & button text based on method
   const icons = { paypal: '🅿️', whatsapp: '💬', invoice: '📄' };
   document.getElementById('deliveryIcon').textContent = icons[method] || '📦';
+  // For invoice: lock payment method to bank transfer, hide selector
+  const pmSelector = document.getElementById('payMethodSelector');
+  const bankNote = document.getElementById('bankTransferNote');
+  if (method === 'invoice') {
+    selectedPayMethod = 'bank';
+    pmSelector.style.display = 'none';
+    bankNote.classList.add('show');
+  } else {
+    selectedPayMethod = 'twint';
+    pmSelector.style.display = 'flex';
+    bankNote.classList.remove('show');
+    // Reset UI
+    document.querySelectorAll('.pay-method-opt').forEach(el => el.classList.remove('active'));
+    document.getElementById('pm-twint').classList.add('active');
+  }
   // Set confirm button action
   document.getElementById('deliveryConfirmBtn').onclick = submitDeliveryForm;
   document.getElementById('deliveryModal').classList.add('open');
@@ -1051,6 +1074,7 @@ function submitDeliveryForm() {
   // Proceed with payment method
   if (pendingPaymentMethod === 'paypal') payWithPayPal();
   else if (pendingPaymentMethod === 'whatsapp') payWithWhatsApp();
+  else if (pendingPaymentMethod === 'invoice') payWithInvoice();
 }
 
 // Build delivery info block for WhatsApp messages
@@ -1280,6 +1304,21 @@ function openInstagramDM() {
 }
 
 // ===== Invoice =====
+function payWithInvoice() {
+  const totalStr = getCartTotal().toFixed(2);
+  const frSummary = buildOrderSummaryFR();
+
+  let message = '📄 Demande de facture\n';
+  message += buildDeliveryBlockFR();
+  message += '\n🛒 Commande :\n' + frSummary;
+  message += '\n\nTotal : CHF ' + totalStr;
+  message += '\n\n💳 Paiement : 🏦 Virement bancaire\nLe commerçant enverra une QR-facture après confirmation. Payez après livraison.';
+  message += '\n\nVeuillez envoyer la facture. Merci !';
+
+  const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
+  window.location.href = waURL;
+}
+
 function closeModal() {
   document.getElementById('successModal').classList.remove('open');
   cart = {};
