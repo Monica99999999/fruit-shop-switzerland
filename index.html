@@ -332,6 +332,8 @@
       <input type="email" id="invEmail" data-i18n="invoice_email_ph" data-zh="your@email.com" placeholder="your@email.com" required>
       <label data-i18n="invoice_name" data-zh="👤 姓名（選填）"></label>
       <input type="text" id="invName" data-i18n="invoice_name_ph" data-zh="姓名" placeholder="Name">
+      <label data-i18n="invoice_phone" data-zh="📞 電話（選填）"></label>
+      <input type="tel" id="invPhone" data-i18n="invoice_phone_ph" data-zh="+41 79 649 50 89" placeholder="+41 79 649 50 89">
       <label data-i18n="invoice_addr" data-zh="📍 配送地址（選填）"></label>
       <textarea id="invAddr" data-i18n="invoice_addr_ph" data-zh="地址" placeholder="Address"></textarea>
       <div class="btn-row">
@@ -400,6 +402,8 @@ const t = {
     invoice_sub: "Enter your email address and the merchant will send you an e-invoice.",
     invoice_email: "📧 Email",
     invoice_name: "👤 Name (optional)",
+    invoice_phone: "📞 Phone (optional)",
+    invoice_phone_ph: "+41 79 649 50 89",
     invoice_addr: "📍 Delivery Address (optional)",
     invoice_confirm: "Confirm & Send Order",
     invoice_cancel: "Cancel",
@@ -462,6 +466,8 @@ const t = {
     invoice_sub: "Geben Sie Ihre E-Mail-Adresse ein, und der Händler sendet Ihnen eine E-Rechnung.",
     invoice_email: "📧 E-Mail",
     invoice_name: "👤 Name (optional)",
+    invoice_phone: "📞 Telefon (optional)",
+    invoice_phone_ph: "+41 79 649 50 89",
     invoice_addr: "📍 Lieferadresse (optional)",
     invoice_confirm: "Bestätigen & Bestellung senden",
     invoice_cancel: "Abbrechen",
@@ -524,6 +530,8 @@ const t = {
     invoice_sub: "Entrez votre adresse e-mail et le commerçant vous enverra une facture électronique.",
     invoice_email: "📧 E-mail",
     invoice_name: "👤 Nom (optionnel)",
+    invoice_phone: "📞 Téléphone (optionnel)",
+    invoice_phone_ph: "+41 79 649 50 89",
     invoice_addr: "📍 Adresse de livraison (optionnel)",
     invoice_confirm: "Confirmer et envoyer la commande",
     invoice_cancel: "Annuler",
@@ -964,6 +972,7 @@ function payWithInvoice() {
   const saved = JSON.parse(localStorage.getItem('ff_invoice_info') || '{}');
   if (saved.email) document.getElementById('invEmail').value = saved.email;
   if (saved.name) document.getElementById('invName').value = saved.name;
+  if (saved.phone) document.getElementById('invPhone').value = saved.phone;
   if (saved.addr) document.getElementById('invAddr').value = saved.addr;
 }
 
@@ -974,6 +983,7 @@ function closeInvoiceModal() {
 function submitInvoice() {
   const email = document.getElementById('invEmail').value.trim();
   const name = document.getElementById('invName').value.trim();
+  const phone = document.getElementById('invPhone').value.trim();
   const addr = document.getElementById('invAddr').value.trim();
 
   if (!email || !email.includes('@')) {
@@ -982,7 +992,7 @@ function submitInvoice() {
   }
 
   // Save info for next time
-  localStorage.setItem('ff_invoice_info', JSON.stringify({ email, name, addr }));
+  localStorage.setItem('ff_invoice_info', JSON.stringify({ email, name, phone, addr }));
 
   // Close invoice modal
   document.getElementById('invoiceModal').classList.remove('open');
@@ -993,6 +1003,7 @@ function submitInvoice() {
   let message = '📄 Demande de facture\n';
   if (name) message += '👤 ' + name + '\n';
   message += '📧 ' + email + '\n';
+  if (phone) message += '📞 ' + phone + '\n';
   if (addr) message += '📍 ' + addr + '\n';
   message += '\n🛒 Commande :\n' + frSummary;
   message += '\n\nTotal : CHF ' + totalStr;
