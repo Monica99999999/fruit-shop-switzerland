@@ -280,7 +280,7 @@
       <p data-i18n="pay_sub" data-zh="请选择您喜欢的付款方式"></p>
     </div>
     <div class="pay-options">
-      <div class="pay-card paypal" onclick="payWithPayPal()">
+      <div class="pay-card paypal" onclick="startCheckout('paypal')">
         <div class="pay-icon">🅿️</div>
         <div class="pay-info">
           <strong>PayPal</strong>
@@ -288,7 +288,7 @@
         </div>
         <div class="pay-arrow">→</div>
       </div>
-      <div class="pay-card whatsapp" onclick="payWithWhatsApp()">
+      <div class="pay-card whatsapp" onclick="startCheckout('whatsapp')">
         <div class="pay-icon">💬</div>
         <div class="pay-info">
           <strong>WhatsApp</strong>
@@ -296,7 +296,7 @@
         </div>
         <div class="pay-arrow">→</div>
       </div>
-      <div class="pay-card invoice" onclick="payWithInvoice()">
+      <div class="pay-card invoice" onclick="startCheckout('invoice')">
         <div class="pay-icon">📄</div>
         <div class="pay-info">
           <strong data-i18n="pay_invoice" data-zh="账单（瑞士）"></strong>
@@ -319,26 +319,26 @@
   </div>
 </div>
 
-<!-- Invoice Form Modal -->
-<div class="modal-overlay" id="invoiceModal">
+<!-- Delivery Info Form Modal (used by all payment methods) -->
+<div class="modal-overlay" id="deliveryModal">
   <div class="checkout-modal">
     <div class="cm-header">
-      <div class="icon">📄</div>
-      <h3 data-i18n="invoice_title" data-zh="帳單付款"></h3>
-      <p data-i18n="invoice_sub" data-zh="請輸入您的電郵地址，商家將發送電子發票給您。"></p>
+      <div class="icon" id="deliveryIcon">📦</div>
+      <h3 data-i18n="delivery_title" data-zh="配送資訊"></h3>
+      <p data-i18n="delivery_sub" data-zh="請輸入您的配送資訊，我們會盡快為您處理訂單。"></p>
     </div>
     <div class="invoice-form">
-      <label data-i18n="invoice_email" data-zh="📧 電郵地址"><span>*</span></label>
-      <input type="email" id="invEmail" data-i18n="invoice_email_ph" data-zh="your@email.com" placeholder="your@email.com" required>
-      <label data-i18n="invoice_name" data-zh="👤 姓名（選填）"></label>
-      <input type="text" id="invName" data-i18n="invoice_name_ph" data-zh="姓名" placeholder="Name">
-      <label data-i18n="invoice_phone" data-zh="📞 電話（選填）"></label>
-      <input type="tel" id="invPhone" data-i18n="invoice_phone_ph" data-zh="+41 79 649 50 89" placeholder="+41 79 649 50 89">
-      <label data-i18n="invoice_addr" data-zh="📍 配送地址（選填）"></label>
-      <textarea id="invAddr" data-i18n="invoice_addr_ph" data-zh="地址" placeholder="Address"></textarea>
+      <label data-i18n="delivery_name" data-zh="👤 收件人姓名"><span>*</span></label>
+      <input type="text" id="delName" data-i18n="delivery_name_ph" data-zh="姓名" placeholder="Name">
+      <label data-i18n="delivery_phone" data-zh="📞 收件人電話"><span>*</span></label>
+      <input type="tel" id="delPhone" data-i18n="delivery_phone_ph" data-zh="+41 79 649 50 89" placeholder="+41 79 649 50 89">
+      <label data-i18n="delivery_email" data-zh="📧 電郵地址（選填）"></label>
+      <input type="email" id="delEmail" data-i18n="delivery_email_ph" data-zh="your@email.com" placeholder="your@email.com">
+      <label data-i18n="delivery_addr" data-zh="📍 配送地址"><span>*</span></label>
+      <textarea id="delAddr" data-i18n="delivery_addr_ph" data-zh="街道、門牌、郵編、城市" placeholder="Street, No., ZIP, City"></textarea>
       <div class="btn-row">
-        <button class="btn-confirm" onclick="submitInvoice()" data-i18n="invoice_confirm" data-zh="確認並發送訂單"></button>
-        <button class="btn-cancel" onclick="closeInvoiceModal()" data-i18n="invoice_cancel" data-zh="取消"></button>
+        <button class="btn-confirm" id="deliveryConfirmBtn" data-i18n="delivery_confirm" data-zh="確認並繼續付款"></button>
+        <button class="btn-cancel" onclick="closeDeliveryModal()" data-i18n="delivery_cancel" data-zh="取消"></button>
       </div>
     </div>
   </div>
@@ -398,15 +398,18 @@ const t = {
     wa_success_desc: "Your order details will be sent as a WhatsApp message.\nJust tap send to confirm!",
     invoice_success_title: "Invoice Requested!",
     invoice_success_desc: "We'll send you an invoice by email.\nPay after delivery — bank transfer or TWINT.",
-    invoice_title: "Invoice Payment",
-    invoice_sub: "Enter your email address and the merchant will send you an e-invoice.",
-    invoice_email: "📧 Email",
-    invoice_name: "👤 Name (optional)",
-    invoice_phone: "📞 Phone (optional)",
-    invoice_phone_ph: "+41 79 649 50 89",
-    invoice_addr: "📍 Delivery Address (optional)",
-    invoice_confirm: "Confirm & Send Order",
-    invoice_cancel: "Cancel",
+    delivery_title: "Delivery Information",
+    delivery_sub: "Please enter your delivery details to process your order.",
+    delivery_name: "👤 Recipient Name",
+    delivery_name_ph: "Name",
+    delivery_phone: "📞 Phone",
+    delivery_phone_ph: "+41 79 649 50 89",
+    delivery_email: "📧 Email (optional)",
+    delivery_email_ph: "your@email.com",
+    delivery_addr: "📍 Delivery Address",
+    delivery_addr_ph: "Street, No., ZIP, City",
+    delivery_confirm: "Confirm & Continue to Payment",
+    delivery_cancel: "Cancel",
     wa_message: "Hello Le Verger Suisse! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
     products: [
       { name:"Swiss Apricots (Valais)",      desc:"Sweet, juicy, sun-ripened in Valais",      tag:"🇨🇭 Swiss Local",   cat:"local"   },
@@ -462,15 +465,18 @@ const t = {
     wa_success_desc: "Ihre Bestelldaten werden als WhatsApp-Nachricht gesendet.\nTippen Sie auf Senden zum Bestätigen!",
     invoice_success_title: "Rechnung angefordert!",
     invoice_success_desc: "Wir senden Ihnen eine Rechnung per E-Mail.\nBezahlen Sie nach Lieferung – Banküberweisung oder TWINT.",
-    invoice_title: "Rechnungszahlung",
-    invoice_sub: "Geben Sie Ihre E-Mail-Adresse ein, und der Händler sendet Ihnen eine E-Rechnung.",
-    invoice_email: "📧 E-Mail",
-    invoice_name: "👤 Name (optional)",
-    invoice_phone: "📞 Telefon (optional)",
-    invoice_phone_ph: "+41 79 649 50 89",
-    invoice_addr: "📍 Lieferadresse (optional)",
-    invoice_confirm: "Bestätigen & Bestellung senden",
-    invoice_cancel: "Abbrechen",
+    delivery_title: "Lieferinformationen",
+    delivery_sub: "Bitte geben Sie Ihre Lieferdaten ein, um Ihre Bestellung zu bearbeiten.",
+    delivery_name: "👤 Empfängername",
+    delivery_name_ph: "Name",
+    delivery_phone: "📞 Telefon",
+    delivery_phone_ph: "+41 79 649 50 89",
+    delivery_email: "📧 E-Mail (optional)",
+    delivery_email_ph: "your@email.com",
+    delivery_addr: "📍 Lieferadresse",
+    delivery_addr_ph: "Strasse, Nr., PLZ, Stadt",
+    delivery_confirm: "Bestätigen & zur Zahlung",
+    delivery_cancel: "Abbrechen",
     wa_message: "Hallo Le Verger Suisse! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
     products: [
       { name:"Schweizer Aprikosen (Wallis)", desc:"Süss, saftig, sonnenreif aus dem Wallis", tag:"🇨🇭 Schweizer Obst", cat:"local"   },
@@ -526,15 +532,18 @@ const t = {
     wa_success_desc: "Votre commande sera envoyée par WhatsApp.\nAppuyez sur envoyer pour confirmer !",
     invoice_success_title: "Facture demandée !",
     invoice_success_desc: "Nous vous enverrons une facture par e-mail.\nPayez après livraison – virement ou espèces.",
-    invoice_title: "Paiement sur facture",
-    invoice_sub: "Entrez votre adresse e-mail et le commerçant vous enverra une facture électronique.",
-    invoice_email: "📧 E-mail",
-    invoice_name: "👤 Nom (optionnel)",
-    invoice_phone: "📞 Téléphone (optionnel)",
-    invoice_phone_ph: "+41 79 649 50 89",
-    invoice_addr: "📍 Adresse de livraison (optionnel)",
-    invoice_confirm: "Confirmer et envoyer la commande",
-    invoice_cancel: "Annuler",
+    delivery_title: "Informations de livraison",
+    delivery_sub: "Veuillez saisir vos informations de livraison pour traiter votre commande.",
+    delivery_name: "👤 Nom du destinataire",
+    delivery_name_ph: "Nom",
+    delivery_phone: "📞 Téléphone",
+    delivery_phone_ph: "+41 79 649 50 89",
+    delivery_email: "📧 E-mail (optionnel)",
+    delivery_email_ph: "your@email.com",
+    delivery_addr: "📍 Adresse de livraison",
+    delivery_addr_ph: "Rue, No., CP, Ville",
+    delivery_confirm: "Confirmer et continuer le paiement",
+    delivery_cancel: "Annuler",
     wa_message: "Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
     products: [
       { name:"Abricots Suisses (Valais)",    desc:"Sucrés, juteux, mûris au soleil à Valais", tag:"🇨🇭 Suisse",        cat:"local"   },
@@ -733,6 +742,10 @@ function buildBilingualMessage(lang) {
     let msg = t.fr.wa_message
       .replace('{items}', frSummary)
       .replace('{total}', totalStr);
+    // Add delivery info if available
+    if (deliveryInfo.name) {
+      msg = buildDeliveryBlockFR() + '\n' + msg;
+    }
     msg += frGuide;
     return msg;
   }
@@ -744,12 +757,19 @@ function buildBilingualMessage(lang) {
   let clientMsg = clientTemplate
     .replace('{items}', clientSummary || '(请查看购物车)')
     .replace('{total}', totalStr);
+  // Add delivery info if available
+  if (deliveryInfo.name) {
+    clientMsg = buildDeliveryBlockLang(lang) + '\n' + clientMsg;
+  }
   clientMsg += clientGuide;
 
   // French version for merchant
   let frMsg = t.fr.wa_message
     .replace('{items}', frSummary)
     .replace('{total}', totalStr);
+  if (deliveryInfo.name) {
+    frMsg = buildDeliveryBlockFR() + '\n' + frMsg;
+  }
   frMsg += frGuide;
 
   return clientMsg + '\n\n——— Version française ———\n' + frMsg;
@@ -830,9 +850,104 @@ function closePaymentModal() {
   document.getElementById('paymentModal').classList.remove('open');
 }
 
+// ===== Generate Order ID =====
+function generateOrderId() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  const rand = Math.floor(Math.random() * 9000 + 1000);
+  return 'LVS-' + y + m + d + '-' + rand;
+}
+
+// ===== Unified Checkout: show delivery form first =====
+let pendingPaymentMethod = '';
+let currentOrderId = '';
+let deliveryInfo = {};
+
+function startCheckout(method) {
+  pendingPaymentMethod = method;
+  document.getElementById('paymentModal').classList.remove('open');
+  // Pre-fill from localStorage
+  const saved = JSON.parse(localStorage.getItem('ff_delivery_info') || '{}');
+  document.getElementById('delName').value = saved.name || '';
+  document.getElementById('delPhone').value = saved.phone || '';
+  document.getElementById('delEmail').value = saved.email || '';
+  document.getElementById('delAddr').value = saved.addr || '';
+  // Update icon & button text based on method
+  const icons = { paypal: '🅿️', whatsapp: '💬', invoice: '📄' };
+  document.getElementById('deliveryIcon').textContent = icons[method] || '📦';
+  // Set confirm button action
+  document.getElementById('deliveryConfirmBtn').onclick = submitDeliveryForm;
+  document.getElementById('deliveryModal').classList.add('open');
+}
+
+function closeDeliveryModal() {
+  document.getElementById('deliveryModal').classList.remove('open');
+}
+
+function submitDeliveryForm() {
+  const name = document.getElementById('delName').value.trim();
+  const phone = document.getElementById('delPhone').value.trim();
+  const email = document.getElementById('delEmail').value.trim();
+  const addr = document.getElementById('delAddr').value.trim();
+
+  // Validate required fields
+  const alerts = {
+    zh: { name: '請輸入收件人姓名', phone: '請輸入收件人電話', addr: '請輸入配送地址' },
+    en: { name: 'Please enter recipient name', phone: 'Please enter phone number', addr: 'Please enter delivery address' },
+    de: { name: 'Bitte geben Sie den Empfängernamen ein', phone: 'Bitte geben Sie die Telefonnummer ein', addr: 'Bitte geben Sie die Lieferadresse ein' },
+    fr: { name: 'Veuillez entrer le nom du destinataire', phone: 'Veuillez entrer le numéro de téléphone', addr: 'Veuillez entrer l\'adresse de livraison' }
+  };
+  const a = alerts[currentLang] || alerts.en;
+  if (!name) { alert(a.name); return; }
+  if (!phone) { alert(a.phone); return; }
+  if (!addr) { alert(a.addr); return; }
+
+  // Save for next time
+  deliveryInfo = { name, phone, email, addr };
+  localStorage.setItem('ff_delivery_info', JSON.stringify(deliveryInfo));
+
+  // Generate order ID
+  currentOrderId = generateOrderId();
+
+  // Close delivery modal
+  document.getElementById('deliveryModal').classList.remove('open');
+
+  // Proceed with payment method
+  if (pendingPaymentMethod === 'paypal') payWithPayPal();
+  else if (pendingPaymentMethod === 'whatsapp') payWithWhatsApp();
+  else if (pendingPaymentMethod === 'invoice') payWithInvoice();
+}
+
+// Build delivery info block for WhatsApp messages
+function buildDeliveryBlockFR() {
+  let block = '📦 N° de commande : ' + currentOrderId + '\n';
+  block += '👤 ' + deliveryInfo.name + '\n';
+  block += '📞 ' + deliveryInfo.phone + '\n';
+  if (deliveryInfo.email) block += '📧 ' + deliveryInfo.email + '\n';
+  block += '📍 ' + deliveryInfo.addr + '\n';
+  return block;
+}
+
+function buildDeliveryBlockLang(lang) {
+  const labels = {
+    zh: { order: '📦 訂單編號：', name: '👤', phone: '📞', email: '📧', addr: '📍' },
+    en: { order: '📦 Order No.: ', name: '👤', phone: '📞', email: '📧', addr: '📍' },
+    de: { order: '📦 Bestellnr.: ', name: '👤', phone: '📞', email: '📧', addr: '📍' },
+    fr: { order: '📦 N° de commande : ', name: '👤', phone: '📞', email: '📧', addr: '📍' }
+  };
+  const l = labels[lang] || labels.en;
+  let block = l.order + currentOrderId + '\n';
+  block += l.name + ' ' + deliveryInfo.name + '\n';
+  block += l.phone + ' ' + deliveryInfo.phone + '\n';
+  if (deliveryInfo.email) block += l.email + ' ' + deliveryInfo.email + '\n';
+  block += l.addr + ' ' + deliveryInfo.addr + '\n';
+  return block;
+}
+
 // ===== PayPal =====
 function payWithPayPal() {
-  document.getElementById('paymentModal').classList.remove('open');
   const total = getCartTotal().toFixed(2);
   const items = Object.keys(cart).map(id => {
     const p = getProductInfo(Number(id));
@@ -843,7 +958,7 @@ function payWithPayPal() {
     + '?cmd=_xclick'
     + '&business=' + encodeURIComponent(SHOP_CONFIG.paypalEmail)
     + '&currency_code=' + SHOP_CONFIG.currency
-    + '&item_name=' + encodeURIComponent('Le Verger Suisse Order')
+    + '&item_name=' + encodeURIComponent('Le Verger Suisse ' + currentOrderId)
     + '&item_number=' + encodeURIComponent(items)
     + '&amount=' + total
     + '&return=' + encodeURIComponent(window.location.href)
@@ -856,7 +971,6 @@ function payWithPayPal() {
 
 // ===== WhatsApp (ALWAYS send in French to merchant) =====
 function payWithWhatsApp() {
-  document.getElementById('paymentModal').classList.remove('open');
   // Debug: save cart to localStorage for recovery
   localStorage.setItem('ff_cart_backup', JSON.stringify(cart));
   let rawTotal = getCartTotal();
@@ -875,7 +989,6 @@ function payWithWhatsApp() {
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
 
   // Synchronous redirect — avoids iOS Safari popup blocker
-  // wa.me links open WhatsApp app directly, current page stays as-is
   window.location.href = waURL;
 }
 
@@ -883,7 +996,13 @@ function openWhatsApp() {
   const hasItems = Object.keys(cart).length > 0;
   let message = '';
   if (hasItems) {
-    message = buildBilingualMessage(currentLang);
+    // If no delivery info yet, use simple bilingual message without delivery block
+    if (!deliveryInfo.name) {
+      message = buildBilingualMessage(currentLang);
+    } else {
+      currentOrderId = currentOrderId || generateOrderId();
+      message = buildBilingualMessage(currentLang);
+    }
   } else {
     // Simple greeting (always French to merchant)
     message = 'Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander. Veuillez me contacter. Merci !';
@@ -966,45 +1085,12 @@ function openInstagramDM() {
 
 // ===== Invoice =====
 function payWithInvoice() {
-  document.getElementById('paymentModal').classList.remove('open');
-  document.getElementById('invoiceModal').classList.add('open');
-  // Pre-fill name from localStorage if available
-  const saved = JSON.parse(localStorage.getItem('ff_invoice_info') || '{}');
-  if (saved.email) document.getElementById('invEmail').value = saved.email;
-  if (saved.name) document.getElementById('invName').value = saved.name;
-  if (saved.phone) document.getElementById('invPhone').value = saved.phone;
-  if (saved.addr) document.getElementById('invAddr').value = saved.addr;
-}
-
-function closeInvoiceModal() {
-  document.getElementById('invoiceModal').classList.remove('open');
-}
-
-function submitInvoice() {
-  const email = document.getElementById('invEmail').value.trim();
-  const name = document.getElementById('invName').value.trim();
-  const phone = document.getElementById('invPhone').value.trim();
-  const addr = document.getElementById('invAddr').value.trim();
-
-  if (!email || !email.includes('@')) {
-    alert(currentLang === 'zh' ? '請輸入有效的電郵地址' : (currentLang === 'de' ? 'Bitte geben Sie eine gültige E-Mail-Adresse ein' : (currentLang === 'fr' ? 'Veuillez entrer une adresse e-mail valide' : 'Please enter a valid email address')));
-    return;
-  }
-
-  // Save info for next time
-  localStorage.setItem('ff_invoice_info', JSON.stringify({ email, name, phone, addr }));
-
-  // Close invoice modal
-  document.getElementById('invoiceModal').classList.remove('open');
-
-  // Build invoice request message (French for merchant)
   const totalStr = getCartTotal().toFixed(2);
   const frSummary = buildOrderSummaryFR();
+
+  // Build invoice request message (French for merchant)
   let message = '📄 Demande de facture\n';
-  if (name) message += '👤 ' + name + '\n';
-  message += '📧 ' + email + '\n';
-  if (phone) message += '📞 ' + phone + '\n';
-  if (addr) message += '📍 ' + addr + '\n';
+  message += buildDeliveryBlockFR();
   message += '\n🛒 Commande :\n' + frSummary;
   message += '\n\nTotal : CHF ' + totalStr;
   message += '\n\n💳 Paiement :\n• TWINT : 079 649 50 89\n• Virement bancaire (QR-facture sur demande)\n• Espèces : uniquement sur place à la ferme';
