@@ -432,7 +432,7 @@
           <span class="pm-icon">💵</span><span data-i18n="pm_cash" data-zh="現金"></span>
         </div>
       </div>
-      <div class="bank-transfer-note" id="bankTransferNote" data-i18n="bank_transfer_note" data-zh="🏦 銀行轉帳說明：商家確認訂單後，將通過 WhatsApp 或電郵發送 QR 帳單給您。收到帳單後，用您的銀行 App 掃碼即可付款。收貨後付款，安全可靠。"></div>
+      <div class="bank-transfer-note" id="bankTransferNote" data-i18n="bank_transfer_note" data-zh="🏦 銀行轉帳：商家確認訂單後發送 QR 帳單，付款後發貨。"></div>
       <div class="btn-row">
         <button class="btn-confirm" id="deliveryConfirmBtn" data-i18n="delivery_confirm" data-zh="確認並繼續付款"></button>
         <button class="btn-cancel" onclick="closeDeliveryModal()" data-i18n="delivery_cancel" data-zh="取消"></button>
@@ -511,7 +511,7 @@ const t = {
     pm_twint: "TWINT",
     pm_bank: "Bank Transfer",
     pm_cash: "Cash",
-    bank_transfer_note: "🏦 Bank transfer: After the merchant confirms your order, a QR invoice will be sent to you via WhatsApp or email. Scan the QR code with your banking app to pay. Pay after delivery — safe and reliable.",
+    bank_transfer_note: "🏦 Bank transfer: The merchant will send you a QR invoice after confirming your order. Please pay before shipping.",
     wa_message: "Hello Le Verger Suisse! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
     products: [
       { name:"Swiss Apricots (Valais)",      desc:"Sweet, juicy, sun-ripened in Valais",      tag:"🇨🇭 Swiss Local",   cat:"local"   },
@@ -583,7 +583,7 @@ const t = {
     pm_twint: "TWINT",
     pm_bank: "Banküberweisung",
     pm_cash: "Barzahlung",
-    bank_transfer_note: "🏦 Banküberweisung: Nach Bestätigung sendet Ihnen der Händler eine QR-Rechnung per WhatsApp oder E-Mail. Scannen Sie den QR-Code mit Ihrer Banking-App. Bezahlen Sie nach Lieferung – sicher und zuverlässig.",
+    bank_transfer_note: "🏦 Banküberweisung: Nach Bestätigung sendet Ihnen der Händler eine QR-Rechnung. Bitte bezahlen Sie vor dem Versand.",
     wa_message: "Hallo Le Verger Suisse! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
     products: [
       { name:"Schweizer Aprikosen (Wallis)", desc:"Süss, saftig, sonnenreif aus dem Wallis", tag:"🇨🇭 Schweizer Obst", cat:"local"   },
@@ -655,7 +655,7 @@ const t = {
     pm_twint: "TWINT",
     pm_bank: "Virement bancaire",
     pm_cash: "Espèces",
-    bank_transfer_note: "🏦 Virement bancaire : Après confirmation, le commerçant vous enverra une QR-facture par WhatsApp ou e-mail. Scannez le QR code avec votre app bancaire pour payer. Payez après livraison — sûr et fiable.",
+    bank_transfer_note: "🏦 Virement bancaire : Après confirmation, le commerçant vous enverra une QR-facture. Veuillez payer avant l'expédition.",
     wa_message: "Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
     products: [
       { name:"Abricots Suisses (Valais)",    desc:"Sucrés, juteux, mûris au soleil à Valais", tag:"🇨🇭 Suisse",        cat:"local"   },
@@ -835,10 +835,10 @@ function getPaymentGuide(lang) {
       fr: '\n💳 Paiement : 📱 TWINT (079 649 50 89)\nVeuillez payer via l\'application TWINT.'
     },
     bank: {
-      zh: '\n💳 付款方式：🏦 銀行轉帳\n商家確認訂單後將發送 QR 帳單給您。收貨後付款。',
-      en: '\n💳 Payment: 🏦 Bank transfer\nThe merchant will send you a QR invoice after order confirmation. Pay after delivery.',
-      de: '\n💳 Zahlung: 🏦 Banküberweisung\nDer Händler sendet Ihnen nach Auftragsbestätigung eine QR-Rechnung. Bezahlen Sie nach Lieferung.',
-      fr: '\n💳 Paiement : 🏦 Virement bancaire\nLe commerçant vous enverra une QR-facture après confirmation. Payez après livraison.'
+      zh: '\n💳 付款方式：🏦 銀行轉帳\n商家確認訂單後將發送 QR 帳單給您，付款後發貨。',
+      en: '\n💳 Payment: 🏦 Bank transfer\nThe merchant will send you a QR invoice after confirmation. Please pay before shipping.',
+      de: '\n💳 Zahlung: 🏦 Banküberweisung\nDer Händler sendet Ihnen nach Bestätigung eine QR-Rechnung. Bitte vor dem Versand bezahlen.',
+      fr: '\n💳 Paiement : 🏦 Virement bancaire\nLe commerçant vous enverra une QR-facture après confirmation. Veuillez payer avant l\'expédition.'
     },
     cash: {
       zh: '\n💳 付款方式：💵 現金（僅限果園現場自取）\n歡迎到果園現場自取並付款。',
@@ -1312,7 +1312,7 @@ function payWithInvoice() {
   message += buildDeliveryBlockFR();
   message += '\n🛒 Commande :\n' + frSummary;
   message += '\n\nTotal : CHF ' + totalStr;
-  message += '\n\n💳 Paiement : 🏦 Virement bancaire\nLe commerçant enverra une QR-facture après confirmation. Payez après livraison.';
+  message += '\n\n💳 Paiement : 🏦 Virement bancaire\nLe commerçant enverra une QR-facture après confirmation. Veuillez payer avant l\'expédition.';
   message += '\n\nVeuillez envoyer la facture. Merci !';
 
   const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
