@@ -103,6 +103,16 @@
     .success-modal .icon { font-size: 56px; margin-bottom: 10px; }
     .success-modal h3 { font-size: 18px; font-weight: 700; color: #333; }
     .success-modal p { font-size: 13px; color: #888; margin-top: 7px; line-height: 1.6; }
+    /* Invoice Form */
+    .invoice-form { text-align: left; margin-top: 12px; }
+    .invoice-form label { display: block; font-size: 12px; font-weight: 600; color: #555; margin: 10px 0 4px; }
+    .invoice-form label span { color: #e65100; }
+    .invoice-form input, .invoice-form textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 14px; font-family: inherit; box-sizing: border-box; outline: none; transition: border-color .2s; }
+    .invoice-form input:focus, .invoice-form textarea:focus { border-color: #e65100; }
+    .invoice-form textarea { resize: vertical; min-height: 50px; }
+    .invoice-form .btn-row { display: flex; gap: 8px; margin-top: 16px; }
+    .invoice-form .btn-confirm { flex: 1; padding: 12px; background: linear-gradient(135deg,#e65100,#ff9800); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .invoice-form .btn-cancel { padding: 12px 16px; background: #f5f5f5; color: #888; border: none; border-radius: 10px; font-size: 13px; cursor: pointer; }
     .success-btn { margin-top: 18px; background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff; border: none; border-radius: 20px; padding: 11px 32px; font-size: 14px; font-weight: 600; cursor: pointer; }
     .wa-float { position: fixed; bottom: 20px; right: 16px; z-index: 150; width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: #fff; border: none; font-size: 30px; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.5); display: flex; align-items: center; justify-content: center; transition: transform .2s; }
     .wa-float:active { transform: scale(0.9); }
@@ -309,6 +319,29 @@
   </div>
 </div>
 
+<!-- Invoice Form Modal -->
+<div class="modal-overlay" id="invoiceModal">
+  <div class="checkout-modal">
+    <div class="cm-header">
+      <div class="icon">📄</div>
+      <h3 data-i18n="invoice_title" data-zh="帳單付款"></h3>
+      <p data-i18n="invoice_sub" data-zh="請輸入您的電郵地址，商家將發送電子發票給您。"></p>
+    </div>
+    <div class="invoice-form">
+      <label data-i18n="invoice_email" data-zh="📧 電郵地址"><span>*</span></label>
+      <input type="email" id="invEmail" data-i18n="invoice_email_ph" data-zh="your@email.com" placeholder="your@email.com" required>
+      <label data-i18n="invoice_name" data-zh="👤 姓名（選填）"></label>
+      <input type="text" id="invName" data-i18n="invoice_name_ph" data-zh="姓名" placeholder="Name">
+      <label data-i18n="invoice_addr" data-zh="📍 配送地址（選填）"></label>
+      <textarea id="invAddr" data-i18n="invoice_addr_ph" data-zh="地址" placeholder="Address"></textarea>
+      <div class="btn-row">
+        <button class="btn-confirm" onclick="submitInvoice()" data-i18n="invoice_confirm" data-zh="確認並發送訂單"></button>
+        <button class="btn-cancel" onclick="closeInvoiceModal()" data-i18n="invoice_cancel" data-zh="取消"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- WhatsApp Float Button -->
 <button class="wa-float" onclick="openWhatsApp()" title="WhatsApp">
   💬
@@ -363,6 +396,13 @@ const t = {
     wa_success_desc: "Your order details will be sent as a WhatsApp message.\nJust tap send to confirm!",
     invoice_success_title: "Invoice Requested!",
     invoice_success_desc: "We'll send you an invoice by email.\nPay after delivery — bank transfer or TWINT.",
+    invoice_title: "Invoice Payment",
+    invoice_sub: "Enter your email address and the merchant will send you an e-invoice.",
+    invoice_email: "📧 Email",
+    invoice_name: "👤 Name (optional)",
+    invoice_addr: "📍 Delivery Address (optional)",
+    invoice_confirm: "Confirm & Send Order",
+    invoice_cancel: "Cancel",
     wa_message: "Hello Le Verger Suisse! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
     products: [
       { name:"Swiss Apricots (Valais)",      desc:"Sweet, juicy, sun-ripened in Valais",      tag:"🇨🇭 Swiss Local",   cat:"local"   },
@@ -418,6 +458,13 @@ const t = {
     wa_success_desc: "Ihre Bestelldaten werden als WhatsApp-Nachricht gesendet.\nTippen Sie auf Senden zum Bestätigen!",
     invoice_success_title: "Rechnung angefordert!",
     invoice_success_desc: "Wir senden Ihnen eine Rechnung per E-Mail.\nBezahlen Sie nach Lieferung – Banküberweisung oder TWINT.",
+    invoice_title: "Rechnungszahlung",
+    invoice_sub: "Geben Sie Ihre E-Mail-Adresse ein, und der Händler sendet Ihnen eine E-Rechnung.",
+    invoice_email: "📧 E-Mail",
+    invoice_name: "👤 Name (optional)",
+    invoice_addr: "📍 Lieferadresse (optional)",
+    invoice_confirm: "Bestätigen & Bestellung senden",
+    invoice_cancel: "Abbrechen",
     wa_message: "Hallo Le Verger Suisse! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
     products: [
       { name:"Schweizer Aprikosen (Wallis)", desc:"Süss, saftig, sonnenreif aus dem Wallis", tag:"🇨🇭 Schweizer Obst", cat:"local"   },
@@ -473,6 +520,13 @@ const t = {
     wa_success_desc: "Votre commande sera envoyée par WhatsApp.\nAppuyez sur envoyer pour confirmer !",
     invoice_success_title: "Facture demandée !",
     invoice_success_desc: "Nous vous enverrons une facture par e-mail.\nPayez après livraison – virement ou espèces.",
+    invoice_title: "Paiement sur facture",
+    invoice_sub: "Entrez votre adresse e-mail et le commerçant vous enverra une facture électronique.",
+    invoice_email: "📧 E-mail",
+    invoice_name: "👤 Nom (optionnel)",
+    invoice_addr: "📍 Adresse de livraison (optionnel)",
+    invoice_confirm: "Confirmer et envoyer la commande",
+    invoice_cancel: "Annuler",
     wa_message: "Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
     products: [
       { name:"Abricots Suisses (Valais)",    desc:"Sucrés, juteux, mûris au soleil à Valais", tag:"🇨🇭 Suisse",        cat:"local"   },
@@ -905,10 +959,48 @@ function openInstagramDM() {
 // ===== Invoice =====
 function payWithInvoice() {
   document.getElementById('paymentModal').classList.remove('open');
-  document.getElementById('successIcon').textContent = '📄';
-  document.getElementById('successTitle').textContent = t[currentLang].invoice_success_title;
-  document.getElementById('successDesc').textContent = t[currentLang].invoice_success_desc;
-  document.getElementById('successModal').classList.add('open');
+  document.getElementById('invoiceModal').classList.add('open');
+  // Pre-fill name from localStorage if available
+  const saved = JSON.parse(localStorage.getItem('ff_invoice_info') || '{}');
+  if (saved.email) document.getElementById('invEmail').value = saved.email;
+  if (saved.name) document.getElementById('invName').value = saved.name;
+  if (saved.addr) document.getElementById('invAddr').value = saved.addr;
+}
+
+function closeInvoiceModal() {
+  document.getElementById('invoiceModal').classList.remove('open');
+}
+
+function submitInvoice() {
+  const email = document.getElementById('invEmail').value.trim();
+  const name = document.getElementById('invName').value.trim();
+  const addr = document.getElementById('invAddr').value.trim();
+
+  if (!email || !email.includes('@')) {
+    alert(currentLang === 'zh' ? '請輸入有效的電郵地址' : (currentLang === 'de' ? 'Bitte geben Sie eine gültige E-Mail-Adresse ein' : (currentLang === 'fr' ? 'Veuillez entrer une adresse e-mail valide' : 'Please enter a valid email address')));
+    return;
+  }
+
+  // Save info for next time
+  localStorage.setItem('ff_invoice_info', JSON.stringify({ email, name, addr }));
+
+  // Close invoice modal
+  document.getElementById('invoiceModal').classList.remove('open');
+
+  // Build invoice request message (French for merchant)
+  const totalStr = getCartTotal().toFixed(2);
+  const frSummary = buildOrderSummaryFR();
+  let message = '📄 Demande de facture\n';
+  if (name) message += '👤 ' + name + '\n';
+  message += '📧 ' + email + '\n';
+  if (addr) message += '📍 ' + addr + '\n';
+  message += '\n🛒 Commande :\n' + frSummary;
+  message += '\n\nTotal : CHF ' + totalStr;
+  message += '\n\n💳 Paiement :\n• TWINT : 079 649 50 89\n• Virement bancaire (QR-facture sur demande)\n• Espèces : uniquement sur place à la ferme';
+  message += '\n\nVeuillez envoyer la facture. Merci !';
+
+  const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
+  window.location.href = waURL;
 }
 
 function closeModal() {
