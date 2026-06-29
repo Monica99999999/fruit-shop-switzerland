@@ -380,14 +380,6 @@
         </div>
         <div class="pay-arrow">→</div>
       </div>
-      <div class="pay-card invoice" onclick="startCheckout('invoice')">
-        <div class="pay-icon">📄</div>
-        <div class="pay-info">
-          <strong data-i18n="pay_invoice" data-zh="账单（瑞士）"></strong>
-          <span data-i18n="pay_invoice_desc" data-zh="收货后付款 · 银行转账或 TWINT"></span>
-        </div>
-        <div class="pay-arrow">→</div>
-      </div>
     </div>
     <button class="cm-close" onclick="closePaymentModal()" data-i18n="cancel" data-zh="← 返回购物车"></button>
   </div>
@@ -1059,7 +1051,6 @@ function submitDeliveryForm() {
   // Proceed with payment method
   if (pendingPaymentMethod === 'paypal') payWithPayPal();
   else if (pendingPaymentMethod === 'whatsapp') payWithWhatsApp();
-  else if (pendingPaymentMethod === 'invoice') payWithInvoice();
 }
 
 // Build delivery info block for WhatsApp messages
@@ -1289,21 +1280,6 @@ function openInstagramDM() {
 }
 
 // ===== Invoice =====
-function payWithInvoice() {
-  const totalStr = getCartTotal().toFixed(2);
-  const frSummary = buildOrderSummaryFR();
-
-  // Build invoice request message (French for merchant)
-  let message = '📄 Demande de facture\n';
-  message += buildDeliveryBlockFR();
-  message += '\n🛒 Commande :\n' + frSummary;
-  message += '\n\nTotal : CHF ' + totalStr;
-  message += '\n\nVeuillez envoyer la facture. Merci !';
-
-  const waURL = 'https://wa.me/' + SHOP_CONFIG.whatsappNumber + '?text=' + encodeURIComponent(message);
-  window.location.href = waURL;
-}
-
 function closeModal() {
   document.getElementById('successModal').classList.remove('open');
   cart = {};
