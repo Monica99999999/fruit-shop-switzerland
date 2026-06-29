@@ -30,6 +30,8 @@
     .hero-text p { font-size: 15px; color: #0d47a1; margin-top: 8px; line-height: 1.6; font-weight: 500; }
     .hero-btn { margin-top: 12px; display: inline-block; background: #1565c0; color: #fff; border-radius: 20px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
     .hero-emoji { font-size: 52px; line-height: 1.15; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+    .wholesale-banner { background: linear-gradient(135deg, #e65100, #ff9800); color: #fff; text-align: center; padding: 10px 14px; font-size: 14px; font-weight: 700; margin: 0 12px; border-radius: 12px; box-shadow: 0 2px 8px rgba(230,81,0,0.3); animation: wholesalePulse 3s ease-in-out infinite; }
+    @keyframes wholesalePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
     .features { display: flex; gap: 0; background: #fff; margin: 12px 12px 0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .feat-item { flex: 1; padding: 12px 4px; text-align: center; font-size: 10px; color: #666; }
     .feat-item + .feat-item { border-left: 1px solid #f5f5f5; }
@@ -207,6 +209,9 @@
   <div class="hero-emoji"><span>🍑</span><br><span>🍇</span><br><span>🍎</span></div>
 </div>
 
+<!-- Wholesale Banner -->
+<div class="wholesale-banner" data-i18n="wholesale_banner" data-zh="🏡 歡迎來農場洽談批發採購！"></div>
+
 <!-- Features -->
 <div class="features">
   <div class="feat-item">
@@ -311,7 +316,7 @@
         <select id="orderFilter" onchange="renderAdminOrders()">
           <option value="all">Toutes les commandes</option>
           <option value="TWINT">📱 TWINT</option>
-          <option value="VIR">🏦 銀行轉帳</option>
+          <option value="VIR">🏦 Virement</option>
           <option value="ESP">💵 Espèces</option>
         </select>
         <span class="order-count" id="orderCount"></span>
@@ -467,6 +472,7 @@ const SHOP_CONFIG = {
 const t = {
   en: {
     tagline: "Premium Fruits · Delivered in Switzerland",
+    wholesale_banner: "🏡 Welcome to the farm for wholesale purchasing!",
     cart: "Cart",
     hero_title: "Valais Fruits, Grown with Heart",
     hero_sub: "From our trees to your table\nSun-ripened apricots + crisp apples · Hand-picked from the orchard · Across Switzerland 🇨🇭",
@@ -541,6 +547,7 @@ const t = {
   },
   de: {
     tagline: "Premium Obst · Geliefert in der Schweiz",
+    wholesale_banner: "🏡 Willkommen auf dem Bauernhof für Großhandelseinkäufe!",
     cart: "Warenkorb",
     hero_title: "Walliser Früchte, mit Herz gezogen",
     hero_sub: "Von unseren Bäumen zu Ihrem Tisch\nSonnige Aprikosen + knackige Äpfel · Handgepflückt vom Obstgarten · In ganz Schweiz 🇨🇭",
@@ -615,6 +622,7 @@ const t = {
   },
   fr: {
     tagline: "Fruits Premium · Livrés en Suisse",
+    wholesale_banner: "🏡 Bienvenue à la ferme pour l'achat en gros !",
     cart: "Panier",
     hero_title: "Fruits du Valais, cultivés avec passion",
     hero_sub: "De nos arbres à votre table\nAbricots gorgés de soleil + pommes croquantes · Cueillis à la main au verger · Livraison toute la Suisse 🇨🇭",
