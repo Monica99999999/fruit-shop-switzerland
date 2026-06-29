@@ -658,6 +658,14 @@ function buildBilingualMessage(lang) {
   const frSummary = buildOrderSummaryFR();
   const frGuide = getPaymentGuide('fr');
 
+  // Define wa_message templates for all languages (zh has no t.zh object)
+  const waTemplates = {
+    en: t.en.wa_message,
+    de: t.de.wa_message,
+    fr: t.fr.wa_message,
+    zh: '您好 Le Verger Suisse！🍎\n我想訂購：\n{items}\n總計：CHF {total}\n請確認。謝謝！'
+  };
+
   if (lang === 'fr') {
     // French client: only send French version
     let msg = t.fr.wa_message
@@ -670,8 +678,9 @@ function buildBilingualMessage(lang) {
   // Client language version
   let clientSummary = buildOrderSummaryLang(lang);
   let clientGuide = getPaymentGuide(lang);
-  let clientMsg = (t[lang] ? t[lang].wa_message : t.en.wa_message)
-    .replace('{items}', clientSummary || '(please check cart)')
+  let clientTemplate = waTemplates[lang] || waTemplates.en;
+  let clientMsg = clientTemplate
+    .replace('{items}', clientSummary || '(请查看购物车)')
     .replace('{total}', totalStr);
   clientMsg += clientGuide;
 
