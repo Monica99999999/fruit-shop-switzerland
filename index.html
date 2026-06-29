@@ -991,7 +991,7 @@ function generateOrderId() {
   const rand = Math.floor(Math.random() * 9000 + 1000);
   const prefixMap = { twint: 'TWINT', bank: 'VIR', cash: 'ESP' };
   const prefix = prefixMap[selectedPayMethod] || 'CMD';
-  return 'LVS-' + prefix + '-' + y + m + d + '-' + rand;
+  return 'LVS-' + prefix + '-' + d + m + y + '-' + rand;
 }
 
 // ===== Unified Checkout: show delivery form first =====
@@ -1397,7 +1397,15 @@ function renderAdminOrders() {
     ? '<tr><td colspan="8" style="text-align:center;color:#aaa;padding:20px;">尚無訂單記錄</td></tr>'
     : filtered.map(o => {
         const items = (o.items || []).map(i => i.name + ' ×' + i.qty).join(', ');
-        const date = o.time ? new Date(o.time).toLocaleDateString('zh-CN') + ' ' + new Date(o.time).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }) : '-';
+        const date = o.time ? (() => {
+          const d = new Date(o.time);
+          const dd = String(d.getDate()).padStart(2, '0');
+          const mm = String(d.getMonth() + 1).padStart(2, '0');
+          const yyyy = d.getFullYear();
+          const hh = String(d.getHours()).padStart(2, '0');
+          const min = String(d.getMinutes()).padStart(2, '0');
+          return dd + '.' + mm + '.' + yyyy + ' ' + hh + ':' + min;
+        })() : '-';
         const pm = o.payMethod || 'twint';
         return `<tr>
           <td style="font-family:monospace;font-size:10px;">${o.id}</td>
@@ -1418,7 +1426,15 @@ function exportOrdersCSV() {
   let csv = '\uFEFF訂單編號,日期,姓名,電話,電郵,地址,付款方式,商品,金額(CHF)\n';
   orders.forEach(o => {
     const items = (o.items || []).map(i => i.name + ' ×' + i.qty).join('; ');
-    const date = o.time ? new Date(o.time).toLocaleString('zh-CN') : '';
+    const date = o.time ? (() => {
+      const d = new Date(o.time);
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      const hh = String(d.getHours()).padStart(2, '0');
+      const min = String(d.getMinutes()).padStart(2, '0');
+      return dd + '.' + mm + '.' + yyyy + ' ' + hh + ':' + min;
+    })() : '';
     const pm = o.payMethod === 'bank' ? '銀行轉帳' : (o.payMethod === 'cash' ? '現金' : 'TWINT');
     csv += `"${o.id}","${date}","${o.name}","${o.phone}","${o.email || ''}","${o.addr}","${pm}","${items}","${o.total}"\n`;
   });
