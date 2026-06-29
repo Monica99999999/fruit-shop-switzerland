@@ -120,6 +120,7 @@
     .pay-method-opt .pm-icon { font-size: 20px; display: block; margin-bottom: 2px; }
     .bank-transfer-note { display: none; background: #fff8e1; border-radius: 10px; padding: 10px 12px; font-size: 12px; color: #6d4c00; margin-top: 8px; line-height: 1.6; }
     .bank-transfer-note.show { display: block; }
+    .twint-note { background: #e8f5e9; color: #2e7d32; }
     .success-btn { margin-top: 18px; background: linear-gradient(135deg, #1565c0, #1e88e5); color: #fff; border: none; border-radius: 20px; padding: 11px 32px; font-size: 14px; font-weight: 600; cursor: pointer; }
     .wa-float { position: fixed; bottom: 20px; right: 16px; z-index: 150; width: 56px; height: 56px; border-radius: 50%; background: #25d366; color: #fff; border: none; font-size: 30px; cursor: grab; box-shadow: 0 4px 20px rgba(37,211,102,0.5); display: flex; align-items: center; justify-content: center; transition: transform .2s; user-select: none; -webkit-user-select: none; touch-action: none; }
     .wa-float:active { cursor: grabbing; }
@@ -433,6 +434,7 @@
         </div>
       </div>
       <div class="bank-transfer-note" id="bankTransferNote" data-i18n="bank_transfer_note" data-zh="🏦 銀行轉帳：商家確認訂單後發送 QR 帳單，付款後發貨。"></div>
+      <div class="bank-transfer-note twint-note" id="twintNote" data-i18n="twint_note" data-zh="📱 TWINT 付款：請在 TWINT App 付款時，在備註中註明訂單編號，方便商家對帳。"></div>
       <div class="btn-row">
         <button class="btn-confirm" id="deliveryConfirmBtn" data-i18n="delivery_confirm" data-zh="確認並繼續付款"></button>
         <button class="btn-cancel" onclick="closeDeliveryModal()" data-i18n="delivery_cancel" data-zh="取消"></button>
@@ -512,6 +514,7 @@ const t = {
     pm_bank: "Bank Transfer",
     pm_cash: "Cash",
     bank_transfer_note: "🏦 Bank transfer: The merchant will send you a QR invoice after confirming your order. Please pay before shipping.",
+    twint_note: "📱 TWINT payment: Please include the order number in the payment reference when paying via TWINT App, so the merchant can match your payment.",
     wa_message: "Hello Le Verger Suisse! 🍎\nI would like to order:\n{items}\nTotal: CHF {total}\nPlease confirm. Thank you!",
     products: [
       { name:"Swiss Apricots (Valais)",      desc:"Sweet, juicy, sun-ripened in Valais",      tag:"🇨🇭 Swiss Local",   cat:"local"   },
@@ -584,6 +587,7 @@ const t = {
     pm_bank: "Banküberweisung",
     pm_cash: "Barzahlung",
     bank_transfer_note: "🏦 Banküberweisung: Nach Bestätigung sendet Ihnen der Händler eine QR-Rechnung. Bitte bezahlen Sie vor dem Versand.",
+    twint_note: "📱 TWINT-Zahlung: Bitte geben Sie die Bestellnummer als Zahlungsreferenz an, wenn Sie via TWINT App bezahlen, damit der Händler Ihre Zahlung zuordnen kann.",
     wa_message: "Hallo Le Verger Suisse! 🍎\nIch möchte bestellen:\n{items}\nTotal: CHF {total}\nBitte bestätigen Sie meine Bestellung. Danke!",
     products: [
       { name:"Schweizer Aprikosen (Wallis)", desc:"Süss, saftig, sonnenreif aus dem Wallis", tag:"🇨🇭 Schweizer Obst", cat:"local"   },
@@ -656,6 +660,7 @@ const t = {
     pm_bank: "Virement bancaire",
     pm_cash: "Espèces",
     bank_transfer_note: "🏦 Virement bancaire : Après confirmation, le commerçant vous enverra une QR-facture. Veuillez payer avant l'expédition.",
+    twint_note: "📱 Paiement TWINT : Veuillez indiquer le numéro de commande comme référence de paiement lors du paiement via l'application TWINT, afin que le commerçant puisse identifier votre paiement.",
     wa_message: "Bonjour Le Verger Suisse ! 🍎\nJe souhaite commander :\n{items}\nTotal : CHF {total}\nVeuillez confirmer. Merci !",
     products: [
       { name:"Abricots Suisses (Valais)",    desc:"Sucrés, juteux, mûris au soleil à Valais", tag:"🇨🇭 Suisse",        cat:"local"   },
@@ -1000,8 +1005,9 @@ function selectPayMethod(method) {
   // Update UI
   document.querySelectorAll('.pay-method-opt').forEach(el => el.classList.remove('active'));
   document.getElementById('pm-' + method).classList.add('active');
-  // Show/hide bank transfer note
+  // Show/hide bank transfer note and TWINT note
   document.getElementById('bankTransferNote').classList.toggle('show', method === 'bank');
+  document.getElementById('twintNote').classList.toggle('show', method === 'twint');
 }
 
 function startCheckout(method) {
